@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { Suspense } from 'react';
 import {
 	ToggleControl,
@@ -5,12 +6,11 @@ import {
 	CheckboxControl,
 	BaseControl,
 	SelectControl,
-	Button,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import { useAsyncResource } from 'use-async-resource';
-import { AlertCircle, Check } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 // Local imports.
 import SendCommand from '../utils/SendCommand';
@@ -21,9 +21,6 @@ import SaveResetButtons from '../components/SaveResetButtons';
  * Retrieve all levels and format into token format.
  */
 const levels = dlxPMProTurnstileAdmin.levels;
-const levelsTokenFormat = Object.values( levels ).map( ( level ) => {
-	return level.name;
-} );
 
 // Get levels into name: { id: id, name: name } format.
 const levelNamesToIds = [];
@@ -33,39 +30,6 @@ Object.values( levels ).forEach( ( level ) => {
 	levelNamesToIds[ level.name ] = { id: parseInt( level.id ), name: level.name };
 } );
 
-/**
- * Return true if valid membership level.
- *
- * @param {string} levelName The level's string name.
- * @return {boolean} True if valid membership level.
- */
-const isValidMembershipLevel = ( levelName ) => {
-	return levelNamesToIds.hasOwnProperty( levelName );
-};
-
-/**
- * Transform a membership name into an ID.
- *
- * @param {string} levelName The level's string name.
- *
- * @return {number} The level's ID. 0 on failure.
- */
-const transformMembershipLevelOnSave = ( levelName ) => {
-	if ( isValidMembershipLevel( levelName ) ) {
-		return levelNamesToIds[ levelName ].id;
-	}
-	return 0;
-};
-
-/**
- * Retrieve a level from the name.
- */
-
-// const transformLevels = ( levelName ) => {
-// 	console.log( levelId );
-// 	return levels[ levelId ].name;
-// };
-
 const retrieveOptions = () => {
 	return SendCommand( 'dlx_pmpro_turnstile_get_options', {
 		nonce: dlxPMProTurnstileAdmin.getNonce,
@@ -73,7 +37,7 @@ const retrieveOptions = () => {
 };
 
 const Main = ( props ) => {
-	const [ defaults, getDefaults ] = useAsyncResource(
+	const [ defaults ] = useAsyncResource(
 		retrieveOptions,
 		[]
 	);
@@ -94,17 +58,14 @@ const Main = ( props ) => {
 const Interface = ( props ) => {
 	const { defaults } = props;
 	const response = defaults();
-	const { data, success } = response.data;
+	const { data } = response.data;
 
 	const {
-		register,
 		control,
 		handleSubmit,
-		setValue,
 		getValues,
 		reset,
 		setError,
-		clearErrors,
 		trigger,
 	} = useForm( {
 		defaultValues: {
@@ -124,17 +85,13 @@ const Interface = ( props ) => {
 		},
 	} );
 	const formValues = useWatch( { control } );
-	const { errors, isDirty, dirtyFields, touchedFields } = useFormState( {
+	const { errors, isDirty, dirtyFields } = useFormState( {
 		control,
 	} );
 
-	const hasErrors = () => {
-		return Object.keys( errors ).length > 0;
-	};
-
-	console.log( getValues( 'excludedMembershipLevels' ) );
 	return (
 		<>
+			{ /* eslint-disable-next-line no-unused-vars */ }
 			<form onSubmit={ handleSubmit( ( formData ) => { } ) }>
 				<div id="dlx-pmpro-turnstile-admin-table">
 					<table className="form-table">
@@ -430,7 +387,7 @@ const Interface = ( props ) => {
 															key={ levelId }
 															name={ `excludedMembershipLevels[${ levelId }]` }
 															control={ control }
-															render={ ( { field: { onChange, value } } ) => (
+															render={ ( { field: { onChange } } ) => (
 																<CheckboxControl
 																	label={ level.name }
 																	className="dlx-admin__checkbox-control"
@@ -465,7 +422,7 @@ const Interface = ( props ) => {
 															key={ levelId }
 															name={ `excludedCheckoutLevels[${ levelId }]` }
 															control={ control }
-															render={ ( { field: { onChange, value } } ) => (
+															render={ ( { field: { onChange } } ) => (
 																<CheckboxControl
 																	label={ level.name }
 																	className="dlx-admin__checkbox-control"

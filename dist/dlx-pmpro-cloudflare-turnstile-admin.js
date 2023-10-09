@@ -18866,6 +18866,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+// eslint-disable-next-line no-unused-vars
 
 
 
@@ -18882,9 +18883,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Retrieve all levels and format into token format.
  */
 var levels = dlxPMProTurnstileAdmin.levels;
-var levelsTokenFormat = Object.values(levels).map(function (level) {
-  return level.name;
-});
 
 // Get levels into name: { id: id, name: name } format.
 var levelNamesToIds = [];
@@ -18896,40 +18894,6 @@ Object.values(levels).forEach(function (level) {
     name: level.name
   };
 });
-
-/**
- * Return true if valid membership level.
- *
- * @param {string} levelName The level's string name.
- * @return {boolean} True if valid membership level.
- */
-var isValidMembershipLevel = function isValidMembershipLevel(levelName) {
-  return levelNamesToIds.hasOwnProperty(levelName);
-};
-
-/**
- * Transform a membership name into an ID.
- *
- * @param {string} levelName The level's string name.
- *
- * @return {number} The level's ID. 0 on failure.
- */
-var transformMembershipLevelOnSave = function transformMembershipLevelOnSave(levelName) {
-  if (isValidMembershipLevel(levelName)) {
-    return levelNamesToIds[levelName].id;
-  }
-  return 0;
-};
-
-/**
- * Retrieve a level from the name.
- */
-
-// const transformLevels = ( levelName ) => {
-// 	console.log( levelId );
-// 	return levels[ levelId ].name;
-// };
-
 var retrieveOptions = function retrieveOptions() {
   return (0,_utils_SendCommand__WEBPACK_IMPORTED_MODULE_3__["default"])('dlx_pmpro_turnstile_get_options', {
     nonce: dlxPMProTurnstileAdmin.getNonce
@@ -18937,9 +18901,8 @@ var retrieveOptions = function retrieveOptions() {
 };
 var Main = function Main(props) {
   var _useAsyncResource = (0,use_async_resource__WEBPACK_IMPORTED_MODULE_2__.useAsyncResource)(retrieveOptions, []),
-    _useAsyncResource2 = _slicedToArray(_useAsyncResource, 2),
-    defaults = _useAsyncResource2[0],
-    getDefaults = _useAsyncResource2[1];
+    _useAsyncResource2 = _slicedToArray(_useAsyncResource, 1),
+    defaults = _useAsyncResource2[0];
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
     fallback: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Comment Editing', 'dlx-pmpro-turnstile')), "Loading")
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Interface, _extends({
@@ -18950,9 +18913,7 @@ var Interface = function Interface(props) {
   var _data$excludedMembers, _data$excludedCheckou;
   var defaults = props.defaults;
   var response = defaults();
-  var _response$data = response.data,
-    data = _response$data.data,
-    success = _response$data.success;
+  var data = response.data.data;
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_6__.useForm)({
       defaultValues: {
         enabled: data.enabled,
@@ -18970,14 +18931,11 @@ var Interface = function Interface(props) {
         resetNonce: dlxPMProTurnstileAdmin.resetNonce
       }
     }),
-    register = _useForm.register,
     control = _useForm.control,
     handleSubmit = _useForm.handleSubmit,
-    setValue = _useForm.setValue,
     getValues = _useForm.getValues,
     reset = _useForm.reset,
     setError = _useForm.setError,
-    clearErrors = _useForm.clearErrors,
     trigger = _useForm.trigger;
   var formValues = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_6__.useWatch)({
     control: control
@@ -18987,12 +18945,7 @@ var Interface = function Interface(props) {
     }),
     errors = _useFormState.errors,
     isDirty = _useFormState.isDirty,
-    dirtyFields = _useFormState.dirtyFields,
-    touchedFields = _useFormState.touchedFields;
-  var hasErrors = function hasErrors() {
-    return Object.keys(errors).length > 0;
-  };
-  console.log(getValues('excludedMembershipLevels'));
+    dirtyFields = _useFormState.dirtyFields;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     onSubmit: handleSubmit(function (formData) {})
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -19322,9 +19275,7 @@ var Interface = function Interface(props) {
       name: "excludedMembershipLevels[".concat(levelId, "]"),
       control: control,
       render: function render(_ref10) {
-        var _ref10$field = _ref10.field,
-          _onChange10 = _ref10$field.onChange,
-          value = _ref10$field.value;
+        var _onChange10 = _ref10.field.onChange;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
           label: level.name,
           className: "dlx-admin__checkbox-control",
@@ -19351,9 +19302,7 @@ var Interface = function Interface(props) {
       name: "excludedCheckoutLevels[".concat(levelId, "]"),
       control: control,
       render: function render(_ref11) {
-        var _ref11$field = _ref11.field,
-          _onChange11 = _ref11$field.onChange,
-          value = _ref11$field.value;
+        var _onChange11 = _ref11.field.onChange;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
           label: level.name,
           className: "dlx-admin__checkbox-control",
