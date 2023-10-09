@@ -1,0 +1,21 @@
+{
+    "name": "dlxplugins/pmpro-turnstile",
+    "description": "Add Turnstile to the checkout and login screen for Paid Memberships Pro.",
+    "type": "project",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Ronald Huereca",
+            "email": "ronald@dlxplugins.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "config": {
+        "vendor-dir": "lib"
+    },
+      "autoload": {
+        "psr-4": {
+            "DLXPlugins\\PMProTurnstile\\": "includes/"
+        }
+    }
+}
