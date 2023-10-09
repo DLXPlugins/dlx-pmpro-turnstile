@@ -5,7 +5,7 @@
 		"wpApiSettings": true,
 		"window": true,
 		"document": true,
-		"alertsDlxBlock": "readonly"
+		"dlxPMProTurnstileAdmin": "readonly"
 	},
 	"env": {
 		"browser": true,

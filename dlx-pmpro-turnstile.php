@@ -72,6 +72,10 @@ class PMProTurnstile {
 		$turnstile = new Turnstile();
 		$turnstile->run();
 
+		// Set up the admin and options.
+		$admin = new Admin();
+		$admin->run();
+
 		/**
 		 * When Turnstile can be extended.
 		 *
@@ -92,6 +96,9 @@ class PMProTurnstile {
 	}
 }
 
+/**
+ * Start your engines!
+ */
 add_action(
 	'plugins_loaded',
 	function () {
@@ -100,6 +107,9 @@ add_action(
 	}
 );
 
+/**
+ * For hooking into the default wp login screen (non-pmpro).
+ */
 add_action(
 	'login_init',
 	function () {
