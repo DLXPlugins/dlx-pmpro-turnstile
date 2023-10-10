@@ -104,6 +104,7 @@ class Options {
 		$defaults = array(
 			'enabled'                  => false,
 			'enabledPMProLoginForm'    => true,
+			'enabledPMProPasswordForm' => true,
 			'enabledWPLoginForm'       => true,
 			'enabledCheckoutForm'      => false,
 			'enabledWPPasswordResetForm' => true,

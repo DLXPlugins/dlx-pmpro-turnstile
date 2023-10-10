@@ -18930,6 +18930,7 @@ var Interface = function Interface(props) {
         widgetTheme: data.widgetTheme,
         widgetSize: data.widgetSize,
         enabledWPPasswordResetForm: data.enabledWPPasswordResetForm,
+        enabledPMProPasswordForm: data.enabledPMProPasswordForm,
         excludedMembershipLevels: (_data$excludedMembers = data.excludedMembershipLevels) !== null && _data$excludedMembers !== void 0 ? _data$excludedMembers : [],
         excludedCheckoutLevels: (_data$excludedCheckou = data.excludedCheckoutLevels) !== null && _data$excludedCheckou !== void 0 ? _data$excludedCheckou : [],
         saveNonce: dlxPMProTurnstileAdmin.saveNonce,
@@ -19270,18 +19271,37 @@ var Interface = function Interface(props) {
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "dlx-admin__row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_6__.Controller, {
-    name: "enabledWPPasswordResetForm",
+    name: "enabledPMProPasswordForm",
     control: control,
     render: function render(_ref10) {
       var _ref10$field = _ref10.field,
         _onChange10 = _ref10$field.onChange,
         value = _ref10$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["default"], {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('WP Password Reset Form', 'dlx-pmpro-turnstile'),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('PMPro Password Reset Form', 'dlx-pmpro-turnstile'),
         className: "dlx-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
           _onChange10(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable Cloudflare Turnstile on the Paid Memberships Pro password reset screen.', 'dlx-pmpro-turnstile')
+      });
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "dlx-admin__row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_6__.Controller, {
+    name: "enabledWPPasswordResetForm",
+    control: control,
+    render: function render(_ref11) {
+      var _ref11$field = _ref11.field,
+        _onChange11 = _ref11$field.onChange,
+        value = _ref11$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('WP Password Reset Form', 'dlx-pmpro-turnstile'),
+        className: "dlx-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          _onChange11(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable Cloudflare Turnstile on the default password reset screen.', 'dlx-pmpro-turnstile')
       });
@@ -19293,16 +19313,16 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_6__.Controller, {
     name: "enabledCheckoutForm",
     control: control,
-    render: function render(_ref11) {
-      var _ref11$field = _ref11.field,
-        _onChange11 = _ref11$field.onChange,
-        value = _ref11$field.value;
+    render: function render(_ref12) {
+      var _ref12$field = _ref12.field,
+        _onChange12 = _ref12$field.onChange,
+        value = _ref12$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Checkout Form', 'dlx-pmpro-turnstile'),
         className: "dlx-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
-          _onChange11(boolValue);
+          _onChange12(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable Cloudflare Turnstile on the PMPro Checkout Form.', 'dlx-pmpro-turnstile')
       });
@@ -19322,14 +19342,14 @@ var Interface = function Interface(props) {
       key: levelId,
       name: "excludedMembershipLevels[".concat(levelId, "]"),
       control: control,
-      render: function render(_ref12) {
-        var _onChange12 = _ref12.field.onChange;
+      render: function render(_ref13) {
+        var _onChange13 = _ref13.field.onChange;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
           label: level.name,
           className: "dlx-admin__checkbox-control",
           checked: currentValue,
           onChange: function onChange(boolValue) {
-            _onChange12(boolValue);
+            _onChange13(boolValue);
           }
         });
       }
@@ -19349,14 +19369,14 @@ var Interface = function Interface(props) {
       key: levelId,
       name: "excludedCheckoutLevels[".concat(levelId, "]"),
       control: control,
-      render: function render(_ref13) {
-        var _onChange13 = _ref13.field.onChange;
+      render: function render(_ref14) {
+        var _onChange14 = _ref14.field.onChange;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
           label: level.name,
           className: "dlx-admin__checkbox-control",
           checked: currentValue,
           onChange: function onChange(boolValue) {
-            _onChange13(boolValue);
+            _onChange14(boolValue);
           }
         });
       }

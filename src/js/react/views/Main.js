@@ -80,6 +80,7 @@ const Interface = ( props ) => {
 			widgetTheme: data.widgetTheme,
 			widgetSize: data.widgetSize,
 			enabledWPPasswordResetForm: data.enabledWPPasswordResetForm,
+			enabledPMProPasswordForm: data.enabledPMProPasswordForm,
 			excludedMembershipLevels: data.excludedMembershipLevels ?? [],
 			excludedCheckoutLevels: data.excludedCheckoutLevels ?? [],
 			saveNonce: dlxPMProTurnstileAdmin.saveNonce,
@@ -361,6 +362,26 @@ const Interface = ( props ) => {
 													} }
 													help={ __(
 														'Enable Cloudflare Turnstile on the default WP Login Form.',
+														'dlx-pmpro-turnstile'
+													) }
+												/>
+											) }
+										/>
+									</div>
+									<div className="dlx-admin__row">
+										<Controller
+											name="enabledPMProPasswordForm"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __( 'PMPro Password Reset Form', 'dlx-pmpro-turnstile' ) }
+													className="dlx-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Enable Cloudflare Turnstile on the Paid Memberships Pro password reset screen.',
 														'dlx-pmpro-turnstile'
 													) }
 												/>

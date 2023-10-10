@@ -67,6 +67,8 @@ class Functions {
 	public static function can_show_turnstile() {
 		global $pmpro_pages;
 
+		$options = Options::get_options();
+
 		// Get the current page object.
 		$current_page = get_queried_object_id();
 
@@ -83,18 +85,57 @@ class Functions {
 			$is_checkout_page = true;
 		}
 
-		$options = Options::get_options();
+		// Let's get the GET action to see if we're on a password reset page.
+		$is_password_reset_page = false;
+		$action                 = filter_input( INPUT_GET, 'action', FILTER_DEFAULT );
+		if ( 'reset_pass' === $action && ( $current_page === $login_page_id || is_login() ) ) {
+			$is_password_reset_page = true;
+		}
+
+		// Let's determine if we're on a login screen.
+		$is_pmpro_login_screen = false;
+		if ( $current_page === $login_page_id ) {
+			$is_pmpro_login_screen = true;
+		}
+
+		// Let's determine if on WP's login screen.
+		$is_wp_login_screen = false;
+		if ( is_login() ) {
+			$is_wp_login_screen = true;
+		}
+
+		/**
+		 * Determine if we're on a login page.
+		 */
+
+		// See if login page and current page match. If so, we're on a login page.
+		if ( $current_page === $login_page_id || is_login() ) {
+			// Now determine if we're on PMPro's pasword reset page.
+			$action = filter_input( INPUT_GET, 'action', FILTER_DEFAULT );
+			if ( $current_page === $login_page_id && 'reset_pass' === $action ) {
+				// Can we show on PMPro's password reset page?
+				$show_on_pmpro_password_screen = (bool) $options['enabledPMProPasswordForm'];
+				if ( ! $show_on_pmpro_password_screen ) {
+					return false;
+				}
+			}
+
+			// Now let's check if we're on the standard WP password reset page.
+			if ( is_login() && 'lostpassword' === $action ) {
+				// Can we show on WP's password reset page?
+				$show_on_wp_password_screen = (bool) $options['enabledWPPasswordResetForm'];
+				if ( ! $show_on_wp_password_screen ) {
+					return false;
+				}
+			}
+		}
 
 		// If we're on a checkout page, check to see if turnstile is even enabled for checkout.
 		if ( $is_checkout_page ) {
-			$options = Options::get_options();
 			if ( ! (bool) $options['enabledCheckoutForm'] ) {
 				return false;
 			}
 		}
-
-		// Retrieve options.
-		$options = Options::get_options();
 
 		// Check if Cloudflare Turnstile is even enabled.
 		if ( ! (bool) $options['enabled'] ) {
@@ -108,16 +149,22 @@ class Functions {
 
 		// If we're on the login page, check if we should show the turnstile.
 		if ( $current_page === $login_page_id || is_login() ) { // is_login introduced in WP 6.1.
-			$is_pmpro_login_form_enabled = (bool) $options['enabledPMProLoginForm'];
-			$is_wp_login_form_enabled    = (bool) $options['enabledWPLoginForm'];
+			$is_pmpro_login_form_enabled    = (bool) $options['enabledPMProLoginForm'];
+			$is_wp_login_form_enabled       = (bool) $options['enabledWPLoginForm'];
+			$is_pmpro_password_form_enabled = (bool) $options['enabledPMProPasswordForm'];
+			$is_wp_password_form_enabled    = (bool) $options['enabledWPPasswordResetForm'];
 
 			// If we're on the login page and PMPro login form is not enabled, bail.
-			if ( ( $current_page === $login_page_id ) && ! $is_pmpro_login_form_enabled ) {
+			if ( $is_pmpro_login_screen && ! $is_pmpro_login_form_enabled ) {
+				return false;
+			} elseif ( $is_wp_login_screen && ! $is_wp_login_form_enabled ) {
 				return false;
 			}
 
 			// If we're on the default WP login page and WP login form is not enabled, bail.
-			if ( is_login() && ! $is_wp_login_form_enabled ) {
+			if ( is_login() && ! $is_wp_login_form_enabled && $is_password_reset_page ) {
+				return false;
+			} elseif ( is_login() && ! $is_pmpro_password_form_enabled && $is_password_reset_page ) {
 				return false;
 			}
 
@@ -189,7 +236,7 @@ class Functions {
 
 		// Get checkout levels to exclude.
 		$checkout_levels_to_exclude = (array) $options['excludedCheckoutLevels'];
-		
+
 		// Get the indexed checkout level.
 		$checkout_level = $checkout_levels_to_exclude[ $checkout_level ] ?? 0;
 		if ( true === $checkout_level ) {

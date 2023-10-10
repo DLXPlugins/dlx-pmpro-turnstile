@@ -27,7 +27,7 @@ class Turnstile {
 		add_action( 'pmpro_checkout_before_submit_button', array( $this, 'output_turnstile_html' ) );
 
 		// Enqueue scripts on the login page.
-		add_action( 'login_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'login_enqueue_scripts', array( $this, 'maybe_enqueue_scripts' ) );
 
 		// Add turnstile to the main wp login form.
 		add_action( 'login_form', array( $this, 'output_turnstile_html' ) );
@@ -227,6 +227,15 @@ class Turnstile {
 		}
 		$this->enqueue_scripts();
 		return $html . '<div id="dlx-pmpro-turnstile"></div>';
+	}
+
+	/**
+	 * Maybe enqueue scripts.
+	 */
+	public function maybe_enqueue_scripts() {
+		if ( Functions::can_show_turnstile() ) {
+			$this->enqueue_scripts();
+		}
 	}
 
 	/**
