@@ -89,7 +89,7 @@ class Admin {
 
 		// Get defaults and reset.
 		$default_options = Options::get_defaults();
-		Options::update_options( $default_options );
+		//Options::update_options( $default_options );
 
 		// Pull in nonces to default options before returning.
 		$default_options['saveNonce']  = $options['saveNonce'];
@@ -194,7 +194,7 @@ class Admin {
 	public function admin_page() {
 		?>
 		<div class="wrap">
-			<h2><?php esc_html_e( 'Turnstile', 'pmpro-turnstile' ); ?></h2>
+			<h2 id="dlx-pmpro-turnstile-admin-header"><?php esc_html_e( 'Turnstile', 'pmpro-turnstile' ); ?></h2>
 			<div id="dlx-pmpro-turnstile"></div>
 		</div>
 		<?php

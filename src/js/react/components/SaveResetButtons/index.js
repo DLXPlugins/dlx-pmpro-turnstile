@@ -108,6 +108,7 @@ const SaveResetButtons = ( props ) => {
 						{ 'is-saving': saving && ! isSaved },
 						{ 'is-saved': isSaved },
 					) }
+					variant="primary"
 					type="button"
 					text={ getSaveText() }
 					icon={ getSaveIcon() }
@@ -128,11 +129,13 @@ const SaveResetButtons = ( props ) => {
 						{ 'has-icon': resetting },
 						{ 'is-resetting': { resetting } },
 					) }
+					variant="secondary"
 					type="button"
 					text={ getResetText() }
 					icon={ resetting ? <Loader2 /> : false }
 					iconSize="18"
 					iconPosition="right"
+					isDestructive={ true }
 					disabled={ saving || resetting }
 					onClick={ ( e ) => {
 						e.preventDefault();

@@ -1,5 +1,18 @@
 @import '../../node_modules/@wordpress/components/build-style/style.css';
 
+@keyframes dlx-pmpro-rotate {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/**
+ * Turn on smooth scroll.
+ */
+html {
+	scroll-behavior: smooth;
+}
+
 /* Table Styles when rows are sections */
 .form-table-row-sections {
 	tr {
@@ -42,3 +55,71 @@
 		font-size: 14px !important; /* override core style */
 	}
 }
+
+.dlx-pmpro-turnstile-admin-buttons button {
+	margin-right: 20px;
+	&:last-child {
+		margin-right: 0;
+	}
+	&.is-saving,
+	&.is-resetting{
+		svg {
+			animation: dlx-pmpro-rotate;
+			animation-duration: 1.2s;
+			animation-iteration-count: infinite;
+			animation-timing-function: linear;
+		}
+	}
+	svg {
+		fill: none;
+		color: currentColor;
+	}
+}
+
+/**
+ * Snackbar styles.
+ */
+ .dlx-pmpro-turnstile-snackbar.components-snackbar {
+	position: fixed;
+	top: 32px;
+	right: 0;
+	z-index: 10000;
+	background: #0D3172;
+	color: #FFF;
+
+	.components-snackbar__content {
+		display: flex;
+		align-items: center;
+	}
+	.components-snackbar__icon {
+		position: absolute;
+		top: 24px;
+		left: 28px;
+		left: 14px;
+		top: auto;
+		bottom: auto;
+		line-height: 0;
+	}
+
+	&.dlx-pmpro-turnstile-snackbar-loading {
+		svg {
+			animation: dlx-pmpro-rotate;
+			animation-duration: 1.2s;
+			animation-iteration-count: infinite;
+			animation-timing-function: linear;
+		}
+	}
+	&.dlx-pmpro-turnstile-snackbar-success {
+		background: #14720D;
+		color: #FFF;
+	}
+	&.dlx-pmpro-turnstile-snackbar-error,
+	&.dlx-pmpro-turnstile-snackbar-critical {
+		background: #820000;
+		color: #FFF;
+	}
+	&.dlx-pmpro-turnstile-snackbar-warning {
+		background: #FFC107;
+		color: #000;
+	}
+ }

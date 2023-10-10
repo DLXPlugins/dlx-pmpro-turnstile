@@ -18449,6 +18449,7 @@ var SaveResetButtons = function SaveResetButtons(props) {
     }, {
       'is-saved': isSaved
     }),
+    variant: "primary",
     type: "button",
     text: getSaveText(),
     icon: getSaveIcon(),
@@ -18487,11 +18488,13 @@ var SaveResetButtons = function SaveResetButtons(props) {
         resetting: resetting
       }
     }),
+    variant: "secondary",
     type: "button",
     text: getResetText(),
     icon: resetting ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], null) : false,
     iconSize: "18",
     iconPosition: "right",
+    isDestructive: true,
     disabled: saving || resetting,
     onClick: function onClick(e) {
       e.preventDefault();

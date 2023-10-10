@@ -3442,6 +3442,18 @@ div.components-toolbar > div + div.has-left-divider::before {
 /*!*****************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/resolve-url-loader/index.js!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[3]!./src/scss/admin.scss ***!
   \*****************************************************************************************************************************************************************************************************************/
+@keyframes dlx-pmpro-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/**
+ * Turn on smooth scroll.
+ */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Table Styles when rows are sections */
 .form-table-row-sections tr {
   border-bottom: 1px solid #ddd;
@@ -3476,6 +3488,66 @@ div.components-toolbar > div + div.has-left-divider::before {
   font-weight: 600 !important; /* override core style */
   text-transform: capitalize !important; /* override core style */
   font-size: 14px !important; /* override core style */
+}
+
+.dlx-pmpro-turnstile-admin-buttons button {
+  margin-right: 20px;
+}
+.dlx-pmpro-turnstile-admin-buttons button:last-child {
+  margin-right: 0;
+}
+.dlx-pmpro-turnstile-admin-buttons button.is-saving svg, .dlx-pmpro-turnstile-admin-buttons button.is-resetting svg {
+  animation: dlx-pmpro-rotate;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+.dlx-pmpro-turnstile-admin-buttons button svg {
+  fill: none;
+  color: currentColor;
+}
+
+/**
+ * Snackbar styles.
+ */
+.dlx-pmpro-turnstile-snackbar.components-snackbar {
+  position: fixed;
+  top: 32px;
+  right: 0;
+  z-index: 10000;
+  background: #0D3172;
+  color: #FFF;
+}
+.dlx-pmpro-turnstile-snackbar.components-snackbar .components-snackbar__content {
+  display: flex;
+  align-items: center;
+}
+.dlx-pmpro-turnstile-snackbar.components-snackbar .components-snackbar__icon {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  left: 14px;
+  top: auto;
+  bottom: auto;
+  line-height: 0;
+}
+.dlx-pmpro-turnstile-snackbar.components-snackbar.dlx-pmpro-turnstile-snackbar-loading svg {
+  animation: dlx-pmpro-rotate;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+.dlx-pmpro-turnstile-snackbar.components-snackbar.dlx-pmpro-turnstile-snackbar-success {
+  background: #14720D;
+  color: #FFF;
+}
+.dlx-pmpro-turnstile-snackbar.components-snackbar.dlx-pmpro-turnstile-snackbar-error, .dlx-pmpro-turnstile-snackbar.components-snackbar.dlx-pmpro-turnstile-snackbar-critical {
+  background: #820000;
+  color: #FFF;
+}
+.dlx-pmpro-turnstile-snackbar.components-snackbar.dlx-pmpro-turnstile-snackbar-warning {
+  background: #FFC107;
+  color: #000;
 }
 
 /*# sourceMappingURL=dlx-pmpro-cloudflare-turnstile-admin.css.map*/
