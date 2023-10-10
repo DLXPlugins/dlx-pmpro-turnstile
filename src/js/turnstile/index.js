@@ -27,7 +27,7 @@ window.onLoadDLXPMProTurnstileCallback = () => {
 	addTurnstileToPasswordForm();
 
 	// Get the submit button. If not found, bail.
-	const submitButtonSelector = '.login-submit input[type="submit"], #pmpro_submit_span input[type="submit"], #loginform input[type="submit"], #lostpasswordform input[type="submit"], #registerform input[type="submit"]';
+	const submitButtonSelector = '.login-submit input[type="submit"], #pmpro_submit_span input[type="submit"], #loginform input[type="submit"], #lostpasswordform input[type="submit"], #registerform input[type="submit"], #wfls-prompt-wrapper input[type="submit"]';
 
 	const submitButton = document.querySelector( submitButtonSelector );
 	if ( null === submitButton ) {

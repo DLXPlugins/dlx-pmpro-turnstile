@@ -50,7 +50,7 @@ class Turnstile {
 		add_filter( 'login_form_middle', array( $this, 'return_turnstile_html' ) );
 
 		// Check turnstile token for login authentication.
-		add_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 1, 2 ); // Run super early.
+		add_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 1, 2 ); // Run super late.
 
 		// Add turnstile output to footer if on login page.
 		add_action( 'wp_footer', array( $this, 'maybe_output_footer_html' ) );
@@ -121,56 +121,63 @@ class Turnstile {
 	 * @return bool true or false if token succeeded.
 	 */
 	public function check_turnstile_token( $user_object = null, $password = '' ) {
-		if ( Functions::can_show_turnstile() ) {
-			// Get options.
-			$options = Options::get_options();
+		// Remove filter to prevent login lockup.
+		remove_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 100, 2 ); 
+		
+		// Get options.
+		$options = Options::get_options();
 
-			// Guilty until proven innocent.
-			$can_proceed = false;
+		// Guilty until proven innocent.
+		$can_proceed = false;
 
-			// If there's a turnstile token, I suppose that means we should validate it.
-			$maybe_token = filter_input( INPUT_POST, 'cf-turnstile-response', FILTER_DEFAULT );
+		// If there's a turnstile token, I suppose that means we should validate it.
+		$maybe_token = filter_input( INPUT_POST, 'cf-turnstile-response', FILTER_DEFAULT );
 
-			// Make sure token is valid.
-			if ( $maybe_token ) {
+		// Get WordFence token. Return if found.
+		$wf_token = filter_input( INPUT_POST, 'wfls-token', FILTER_DEFAULT );
+		if ( $maybe_token &&  $wf_token && null !== $user_object ) {
+			return $user_object;
+		}
 
-				$cloudflare_endpoint_api = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+		// Make sure token is valid.
+		if ( $maybe_token ) {
 
-				/**
-				 * Always passes: 1x0000000000000000000000000000000AA
-				 * Always fails: 2x0000000000000000000000000000000AA
-				 */
-				$secret_key = $options['secretKey'] ?? '';
+			$cloudflare_endpoint_api = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
-				// Build data envelope.
-				$data = array(
-					'secret'   => $secret_key,
-					'response' => sanitize_text_field( $maybe_token ),
-				);
+			/**
+			 * Always passes: 1x0000000000000000000000000000000AA
+			 * Always fails: 2x0000000000000000000000000000000AA
+			 */
+			$secret_key = $options['secretKey'] ?? '';
 
-				$args = array(
-					'body'      => $data,
-					'method'    => 'POST',
-					'sslverify' => true,
-				);
+			// Build data envelope.
+			$data = array(
+				'secret'   => $secret_key,
+				'response' => sanitize_text_field( $maybe_token ),
+			);
 
-				$response = wp_remote_post( esc_url( $cloudflare_endpoint_api ), $args );
+			$args = array(
+				'body'      => $data,
+				'method'    => 'POST',
+				'sslverify' => true,
+			);
 
-				// If error, show response.
-				if ( is_wp_error( $response ) ) {
-					$can_proceed = false;
-				}
+			$response = wp_remote_post( esc_url( $cloudflare_endpoint_api ), $args );
 
-				// Get body.
-				$body = json_decode( wp_remote_retrieve_body( $response ), true );
+			// If error, show response.
+			if ( is_wp_error( $response ) ) {
+				$can_proceed = false;
+			}
 
-				$is_success = $body['success'] ?? false;
-				// If not a success, error.
-				if ( ! $is_success ) {
-					$can_proceed = false;
-				} else {
-					$can_proceed = true;
-				}
+			// Get body.
+			$body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+			$is_success = $body['success'] ?? false;
+			// If not a success, error.
+			if ( ! $is_success ) {
+				$can_proceed = false;
+			} else {
+				$can_proceed = true;
 			}
 		}
 
