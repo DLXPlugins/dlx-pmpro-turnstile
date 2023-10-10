@@ -137,11 +137,6 @@ class Functions {
 			}
 		}
 
-		// Check if Cloudflare Turnstile is even enabled.
-		if ( ! (bool) $options['enabled'] ) {
-			return false;
-		}
-
 		// Determine if we're on a login or checkout page. If not, bail.
 		if ( ! in_array( $current_page, array( $login_page_id, $checkout_page_id ), true ) && ! is_login() ) {
 			return false;

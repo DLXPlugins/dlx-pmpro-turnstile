@@ -23,6 +23,14 @@ class Turnstile {
 	 * Class runner.
 	 */
 	public function run() {
+
+		// Get options.
+		$options = Options::get_options();
+		// Check if Cloudflare Turnstile is even enabled.
+		if ( ! (bool) $options['enabled'] ) {
+			return false;
+		}
+
 		// Add Turnstile before the checkout button on checkout pages.
 		add_action( 'pmpro_checkout_before_submit_button', array( $this, 'output_turnstile_html' ) );
 
@@ -158,12 +166,10 @@ class Turnstile {
 
 				$is_success = $body['success'] ?? false;
 				// If not a success, error.
-				if ( $can_proceed && ! $is_success ) {
+				if ( ! $is_success ) {
 					$can_proceed = false;
-				} elseif ( $can_proceed && $is_success ) {
-					$can_proceed = true;
 				} else {
-					$can_proceed = false;
+					$can_proceed = true;
 				}
 			}
 		}
