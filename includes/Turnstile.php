@@ -44,7 +44,7 @@ class Turnstile {
 		add_action( 'lostpassword_form', array( $this, 'output_turnstile_html' ) );
 
 		// Hook into checkout process and check Turnstile token.
-		add_action( 'pmpro_checkout_before_processing', array( $this, 'check_turnstile_token' ), 1 ); // Run super early.
+		add_filter( 'pmpro_registration_checks', array( $this, 'pre_check_turnstile_token' ), 20 );
 
 		// Hook into bottom of login page.
 		add_filter( 'login_form_middle', array( $this, 'return_turnstile_html' ) );
@@ -63,7 +63,34 @@ class Turnstile {
 	}
 
 	/**
+	 * Check the Turnstile token before account creation.
+	 *
+	 * @param array $can_continue Whether or not to continue with registration.
+	 *
+	 * @return array $can_continue Whether or not to continue with registration.
+	 */
+	public function pre_check_turnstile_token( $can_continue ) {
+		if ( Functions::can_show_turnstile() ) {
+			$token_check = $this->check_turnstile_token();
+			if ( null === $token_check ) {
+				// This means no user was found, but this means Cloudflare verification passed.
+				return true;
+			}
+			if ( \is_wp_error( $token_check ) || ! $token_check ) {
+				$can_continue = false;
+				pmpro_setMessage( esc_html__( 'Sorry, we could not verify that you are human..', 'dlx-pmpro-turnstile' ), 'pmpro_error' );
+
+			}
+		}
+		return $can_continue;
+	}
+
+	/**
 	 * Set error messages if password reset fails.
+	 *
+	 * @param string $content The content.
+	 *
+	 * @return string $content The content.
 	 */
 	public function output_password_reset_failure( $content ) {
 		global $pmpro_msg, $pmpro_msgt, $pmpro_error_fields;
@@ -118,7 +145,7 @@ class Turnstile {
 	 * @param \WP_User $user_object The user object.
 	 * @param string   $password    The user's password.
 	 *
-	 * @return bool true or false if token succeeded.
+	 * @return bool|null|\WP_User true or false if token succeeded.
 	 */
 	public function check_turnstile_token( $user_object = null, $password = '' ) {
 		// Remove filter to prevent login lockup.
