@@ -77,7 +77,9 @@ const Interface = ( props ) => {
 			secretKey: data.secretKey,
 			language: data.language,
 			widgetAppearance: data.widgetAppearance,
+			widgetTheme: data.widgetTheme,
 			widgetSize: data.widgetSize,
+			enabledWPPasswordResetForm: data.enabledWPPasswordResetForm,
 			excludedMembershipLevels: data.excludedMembershipLevels ?? [],
 			excludedCheckoutLevels: data.excludedCheckoutLevels ?? [],
 			saveNonce: dlxPMProTurnstileAdmin.saveNonce,
@@ -94,7 +96,7 @@ const Interface = ( props ) => {
 			{ /* eslint-disable-next-line no-unused-vars */ }
 			<form onSubmit={ handleSubmit( ( formData ) => { } ) }>
 				<div id="dlx-pmpro-turnstile-admin-table">
-					<table className="form-table">
+					<table className="form-table form-table-row-sections">
 						<tbody>
 							<tr>
 								<th scope="row">{ __( 'Enable Cloudflare Turnstile', 'dlx-pmpro-turnstile' ) }</th>
@@ -197,11 +199,11 @@ const Interface = ( props ) => {
 								<td>
 									<div className="dlx-admin__row">
 										<Controller
-											name="widgetAppearance"
+											name="widgetTheme"
 											control={ control }
 											render={ ( { field: { onChange, value } } ) => (
 												<SelectControl
-													label={ __( 'Widget Appearance', 'dlx-pmpro-turnstile' ) }
+													label={ __( 'Choose a Widget Theme', 'dlx-pmpro-turnstile' ) }
 													className="dlx-admin__select-control"
 													value={ value }
 													onChange={ ( stringValue ) => {
@@ -212,10 +214,34 @@ const Interface = ( props ) => {
 														{ label: __( 'Auto', 'dlx-pmpro-turnstile' ), value: 'auto' },
 														{ label: __( 'Light', 'dlx-pmpro-turnstile' ), value: 'light' },
 														{ label: __( 'Dark', 'dlx-pmpro-turnstile' ), value: 'dark' },
+													] }
+													help={ __(
+														'Your Cloudflare Turnstile Widget Theme. If you select `auto`, the widget will automatically change between light and dark based on the user’s operating system preference.',
+														'dlx-pmpro-turnstile'
+													) }
+												/>
+											) }
+										/>
+									</div>
+									<div className="dlx-admin__row">
+										<Controller
+											name="widgetAppearance"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<SelectControl
+													label={ __( 'Visibility', 'dlx-pmpro-turnstile' ) }
+													className="dlx-admin__select-control"
+													value={ value }
+													onChange={ ( stringValue ) => {
+														onChange( stringValue );
+													} }
+													options={ [
+														/* light, dark, auto */
+														{ label: __( 'Show Always', 'dlx-pmpro-turnstile' ), value: 'always' },
 														{ label: __( 'Invisible', 'dlx-pmpro-turnstile' ), value: 'interaction-only' },
 													] }
 													help={ __(
-														'Your Cloudflare Turnstile Widget Appearance. If you select Invisible, the user will not see the widget, but the challenge will still be applied.',
+														'Set whether the widget is visible or invisible. Users can still be presented with a challenge if the widget is invisible.',
 														'dlx-pmpro-turnstile'
 													) }
 												/>
@@ -298,7 +324,7 @@ const Interface = ( props ) => {
 							</tr>
 							<tr>
 								<th scope="row">
-									{ __( 'Forms', 'dlx-pmpro-turnstile' ) }
+									{ __( 'Login Forms', 'dlx-pmpro-turnstile' ) }
 								</th>
 								<td>
 									<div className="dlx-admin__row">
@@ -343,6 +369,33 @@ const Interface = ( props ) => {
 									</div>
 									<div className="dlx-admin__row">
 										<Controller
+											name="enabledWPPasswordResetForm"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __( 'WP Password Reset Form', 'dlx-pmpro-turnstile' ) }
+													className="dlx-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Enable Cloudflare Turnstile on the default password reset screen.',
+														'dlx-pmpro-turnstile'
+													) }
+												/>
+											) }
+										/>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									{ __( 'Checkout Form', 'dlx-pmpro-turnstile' ) }
+								</th>
+								<td>
+									<div className="dlx-admin__row">
+										<Controller
 											name="enabledCheckoutForm"
 											control={ control }
 											render={ ( { field: { onChange, value } } ) => (
@@ -361,83 +414,80 @@ const Interface = ( props ) => {
 											) }
 										/>
 									</div>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row">
-									{ __( 'Exclusions', 'dlx-pmpro-turnstile' ) }
-								</th>
-								<td>
-									<div className="dlx-admin__row">
-										<BaseControl
-											id="excludedMembershipLevelsBase"
-											label={ __( 'User Membership Levels to Skip', 'dlx-pmpro-turnstile' ) }
-											help={ __(
-												'If a user is signed in and has one of these membership levels, they will not be shown the Turnstile challenge.',
-												'dlx-pmpro-turnstile'
-											) }
-										>
-											{
-												Object.values( levelNamesToIds ).map( ( level ) => {
-													const levelId = level.id;
-													const excludedLevels = getValues( 'excludedMembershipLevels' );
-													const currentValue = excludedLevels[ levelId ] ?? false;
-													return (
-														<Controller
-															key={ levelId }
-															name={ `excludedMembershipLevels[${ levelId }]` }
-															control={ control }
-															render={ ( { field: { onChange } } ) => (
-																<CheckboxControl
-																	label={ level.name }
-																	className="dlx-admin__checkbox-control"
-																	checked={ currentValue }
-																	onChange={ ( boolValue ) => {
-																		onChange( boolValue );
-																	} }
+									{ getValues( 'enabledCheckoutForm' ) && (
+										<>
+											<div className="dlx-admin__row">
+												<BaseControl
+													id="excludedMembershipLevelsBase"
+													label={ __( 'User Membership Levels to Skip', 'dlx-pmpro-turnstile' ) }
+													help={ __(
+														'If a user is signed in and has one of these membership levels, they will not be shown the Turnstile challenge.',
+														'dlx-pmpro-turnstile'
+													) }
+												>
+													{
+														Object.values( levelNamesToIds ).map( ( level ) => {
+															const levelId = level.id;
+															const excludedLevels = getValues( 'excludedMembershipLevels' );
+															const currentValue = excludedLevels[ levelId ] ?? false;
+															return (
+																<Controller
+																	key={ levelId }
+																	name={ `excludedMembershipLevels[${ levelId }]` }
+																	control={ control }
+																	render={ ( { field: { onChange } } ) => (
+																		<CheckboxControl
+																			label={ level.name }
+																			className="dlx-admin__checkbox-control"
+																			checked={ currentValue }
+																			onChange={ ( boolValue ) => {
+																				onChange( boolValue );
+																			} }
+																		/>
+																	) }
 																/>
-															) }
-														/>
-													);
-												} )
-											}
-										</BaseControl>
-									</div>
-									<div className="dlx-admin__row">
-										<BaseControl
-											id="excludedCheckoutLevelsBase"
-											label={ __( 'Checkout Membership Levels to Skip', 'dlx-pmpro-turnstile' ) }
-											help={ __(
-												'If someone tries to check out with this level, they will not be shown the Turnstile challenge.',
-												'dlx-pmpro-turnstile'
-											) }
-										>
-											{
-												Object.values( levelNamesToIds ).map( ( level ) => {
-													const levelId = level.id;
-													const excludedLevels = getValues( 'excludedCheckoutLevels' );
-													const currentValue = excludedLevels[ levelId ] ?? false;
-													return (
-														<Controller
-															key={ levelId }
-															name={ `excludedCheckoutLevels[${ levelId }]` }
-															control={ control }
-															render={ ( { field: { onChange } } ) => (
-																<CheckboxControl
-																	label={ level.name }
-																	className="dlx-admin__checkbox-control"
-																	checked={ currentValue }
-																	onChange={ ( boolValue ) => {
-																		onChange( boolValue );
-																	} }
+															);
+														} )
+													}
+												</BaseControl>
+											</div>
+											<div className="dlx-admin__row">
+												<BaseControl
+													id="excludedCheckoutLevelsBase"
+													label={ __( 'Checkout Membership Levels to Skip', 'dlx-pmpro-turnstile' ) }
+													help={ __(
+														'If someone tries to check out with this level, they will not be shown the Turnstile challenge.',
+														'dlx-pmpro-turnstile'
+													) }
+												>
+													{
+														Object.values( levelNamesToIds ).map( ( level ) => {
+															const levelId = level.id;
+															const excludedLevels = getValues( 'excludedCheckoutLevels' );
+															const currentValue = excludedLevels[ levelId ] ?? false;
+															return (
+																<Controller
+																	key={ levelId }
+																	name={ `excludedCheckoutLevels[${ levelId }]` }
+																	control={ control }
+																	render={ ( { field: { onChange } } ) => (
+																		<CheckboxControl
+																			label={ level.name }
+																			className="dlx-admin__checkbox-control"
+																			checked={ currentValue }
+																			onChange={ ( boolValue ) => {
+																				onChange( boolValue );
+																			} }
+																		/>
+																	) }
 																/>
-															) }
-														/>
-													);
-												} )
-											}
-										</BaseControl>
-									</div>
+															);
+														} )
+													}
+												</BaseControl>
+											</div>
+										</>
+									) }
 								</td>
 							</tr>
 						</tbody>

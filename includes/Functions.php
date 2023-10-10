@@ -70,24 +70,44 @@ class Functions {
 		// Get the current page object.
 		$current_page = get_queried_object_id();
 
+		// Get the login and checkout page IDs.
 		$login_page_id    = self::get_login_page_id();
 		$checkout_page_id = self::get_checkout_page_id();
+
+		// Retrieve options.
+		$options = Options::get_options();
+
+		// Check if Cloudflare Turnstile is even enabled.
+		if ( ! (bool) $options['enabled'] ) {
+			return false;
+		}
 
 		// Determine if we're on a login or checkout page. If not, bail.
 		if ( ! in_array( $current_page, array( $login_page_id, $checkout_page_id ), true ) && ! is_login() ) {
 			return false;
 		}
 
-		// IF we're on the login page, check if we should show the turnstile.
+		// If we're on the login page, check if we should show the turnstile.
 		if ( $current_page === $login_page_id || is_login() ) { // is_login introduced in WP 6.1.
-			$is_turnstile_enabled_on_login = true; // todo: make option.
+			$is_pmpro_login_form_enabled = (bool) $options['enabledPMProLoginForm'];
+			$is_wp_login_form_enabled    = (bool) $options['enabledWPLoginForm'];
+
+			// If we're on the login page and PMPro login form is not enabled, bail.
+			if ( ( $current_page === $login_page_id ) && ! $is_pmpro_login_form_enabled ) {
+				return false;
+			}
+
+			// If we're on the default WP login page and WP login form is not enabled, bail.
+			if ( is_login() && ! $is_wp_login_form_enabled ) {
+				return false;
+			}
 
 			// Skip if query var is to exclude turnstile.
 			$query_hash = filter_input( INPUT_GET, 'pmpro_turnstile_debug', FILTER_DEFAULT );
 
-			$saved_query_hash = '123';
+			$saved_query_hash = '123'; // todo - make option.
 
-			$is_cloudflare_debug_enabled = true; // todo: make option.
+			$is_cloudflare_debug_enabled = false; // todo: make option.
 
 			// IF debug is on and hashes match, do not show turnstile.
 			if ( $is_cloudflare_debug_enabled && $query_hash === $saved_query_hash ) {
@@ -113,7 +133,7 @@ class Functions {
 
 		// We are on the checkout page. Let's set some vars.
 		$current_user_level           = 0;
-		$membership_levels_to_exclude = array(); // todo: make option.
+		$membership_levels_to_exclude = (array) $options['excludedMembershipLevels'];
 		$is_logged_in                 = \is_user_logged_in();
 
 		// If user is logged in, get level.
@@ -124,13 +144,14 @@ class Functions {
 				return false;
 			}
 			$current_user_level = pmpro_getMembershipLevelForUser( get_current_user_id() );
+			$current_user_level = absint( $current_user_level->ID ?? 0 );
 		}
 
 		// If user is logged in and has a level, check if they should be excluded.
 		if ( $is_logged_in && ! empty( $current_user_level ) ) {
 
-			// If user has a level, check if they should be excluded.
-			if ( in_array( $current_user_level->id, $membership_levels_to_exclude, true ) ) {
+			$membership_level_to_skip = $membership_levels_to_exclude[ $current_user_level ] ?? 0;
+			if ( true === $membership_level_to_skip ) {
 				return false;
 			}
 		}
@@ -140,10 +161,11 @@ class Functions {
 		$checkout_level = absint( $pmpro_level->id ?? 0 );
 
 		// Get checkout levels to exclude.
-		$checkout_levels_to_exclude = array(); // todo: make option.
+		$checkout_levels_to_exclude = (array) $options['excludedCheckoutLevels'];
 
-		// If checkout level is in the exclude array, bail.
-		if ( in_array( $checkout_level, $checkout_levels_to_exclude, true ) ) {
+		// Get the indexed checkout level.
+		$checkout_level = $checkout_levels_to_exclude[ $checkout_level ] ?? 0;
+		if ( true === $checkout_level ) {
 			return false;
 		}
 

@@ -1,0 +1,44 @@
+@import '../../node_modules/@wordpress/components/build-style/style.css';
+
+/* Table Styles when rows are sections */
+.form-table-row-sections {
+	tr {
+		border-bottom: 1px solid #ddd;
+
+		&:last-child {
+			border-bottom: 0;
+		}
+	}
+
+	td {
+		padding-top: 20px;
+	}
+}
+.form-table td {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.form-table {
+	input[type="text"],
+	select {
+		display: block;
+		max-width: 600px !important;
+	}
+
+	.dlx-admin__row {
+		margin-bottom: 20px;
+		&:last-child {
+			margin-bottom: 0;
+		}
+		max-width: 600px !important;
+	}
+	
+	.components-toggle-control__label,
+	.components-base-control__label,
+	.components-input-control__label {
+		font-weight: 600 !important; /* override core style */
+		text-transform: capitalize !important; /* override core style */
+		font-size: 14px !important; /* override core style */
+	}
+}

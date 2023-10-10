@@ -18924,7 +18924,9 @@ var Interface = function Interface(props) {
         secretKey: data.secretKey,
         language: data.language,
         widgetAppearance: data.widgetAppearance,
+        widgetTheme: data.widgetTheme,
         widgetSize: data.widgetSize,
+        enabledWPPasswordResetForm: data.enabledWPPasswordResetForm,
         excludedMembershipLevels: (_data$excludedMembers = data.excludedMembershipLevels) !== null && _data$excludedMembers !== void 0 ? _data$excludedMembers : [],
         excludedCheckoutLevels: (_data$excludedCheckou = data.excludedCheckoutLevels) !== null && _data$excludedCheckou !== void 0 ? _data$excludedCheckou : [],
         saveNonce: dlxPMProTurnstileAdmin.saveNonce,
@@ -18951,7 +18953,7 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     id: "dlx-pmpro-turnstile-admin-table"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("table", {
-    className: "form-table"
+    className: "form-table form-table-row-sections"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable Cloudflare Turnstile', 'dlx-pmpro-turnstile')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_6__.Controller, {
@@ -19050,14 +19052,14 @@ var Interface = function Interface(props) {
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Appearance', 'dlx-pmpro-turnstile')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "dlx-admin__row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_6__.Controller, {
-    name: "widgetAppearance",
+    name: "widgetTheme",
     control: control,
     render: function render(_ref4) {
       var _ref4$field = _ref4.field,
         _onChange4 = _ref4$field.onChange,
         value = _ref4$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_10__["default"], {
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Widget Appearance', 'dlx-pmpro-turnstile'),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Choose a Widget Theme', 'dlx-pmpro-turnstile'),
         className: "dlx-admin__select-control",
         value: value,
         onChange: function onChange(stringValue) {
@@ -19073,11 +19075,35 @@ var Interface = function Interface(props) {
         }, {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Dark', 'dlx-pmpro-turnstile'),
           value: 'dark'
+        }],
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Your Cloudflare Turnstile Widget Theme. If you select `auto`, the widget will automatically change between light and dark based on the user’s operating system preference.', 'dlx-pmpro-turnstile')
+      });
+    }
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "dlx-admin__row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_6__.Controller, {
+    name: "widgetAppearance",
+    control: control,
+    render: function render(_ref5) {
+      var _ref5$field = _ref5.field,
+        _onChange5 = _ref5$field.onChange,
+        value = _ref5$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_10__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Visibility', 'dlx-pmpro-turnstile'),
+        className: "dlx-admin__select-control",
+        value: value,
+        onChange: function onChange(stringValue) {
+          _onChange5(stringValue);
+        },
+        options: [/* light, dark, auto */
+        {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show Always', 'dlx-pmpro-turnstile'),
+          value: 'always'
         }, {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Invisible', 'dlx-pmpro-turnstile'),
           value: 'interaction-only'
         }],
-        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Your Cloudflare Turnstile Widget Appearance. If you select Invisible, the user will not see the widget, but the challenge will still be applied.', 'dlx-pmpro-turnstile')
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Set whether the widget is visible or invisible. Users can still be presented with a challenge if the widget is invisible.', 'dlx-pmpro-turnstile')
       });
     }
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -19088,10 +19114,10 @@ var Interface = function Interface(props) {
     rules: {
       required: true
     },
-    render: function render(_ref5) {
-      var _ref5$field = _ref5.field,
-        _onChange5 = _ref5$field.onChange,
-        value = _ref5$field.value;
+    render: function render(_ref6) {
+      var _ref6$field = _ref6.field,
+        _onChange6 = _ref6$field.onChange,
+        value = _ref6$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_10__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Widget Size', 'dlx-pmpro-turnstile'),
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select the size for the widget.', 'dlx-pmpro-turnstile'),
@@ -19105,7 +19131,7 @@ var Interface = function Interface(props) {
           value: 'compact'
         }],
         onChange: function onChange(widgetSizeValue) {
-          _onChange5(widgetSizeValue);
+          _onChange6(widgetSizeValue);
         }
       });
     }
@@ -19114,16 +19140,16 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_6__.Controller, {
     name: "language",
     control: control,
-    render: function render(_ref6) {
-      var _ref6$field = _ref6.field,
-        _onChange6 = _ref6$field.onChange,
-        value = _ref6$field.value;
+    render: function render(_ref7) {
+      var _ref7$field = _ref7.field,
+        _onChange7 = _ref7$field.onChange,
+        value = _ref7$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_10__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Language', 'dlx-pmpro-turnstile'),
         className: "dlx-admin__select-control",
         value: value,
         onChange: function onChange(stringValue) {
-          _onChange6(stringValue);
+          _onChange7(stringValue);
         },
         options: [{
           value: 'ar',
@@ -19200,21 +19226,21 @@ var Interface = function Interface(props) {
     }
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
     scope: "row"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Forms', 'dlx-pmpro-turnstile')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Login Forms', 'dlx-pmpro-turnstile')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "dlx-admin__row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_6__.Controller, {
     name: "enabledPMProLoginForm",
     control: control,
-    render: function render(_ref7) {
-      var _ref7$field = _ref7.field,
-        _onChange7 = _ref7$field.onChange,
-        value = _ref7$field.value;
+    render: function render(_ref8) {
+      var _ref8$field = _ref8.field,
+        _onChange8 = _ref8$field.onChange,
+        value = _ref8$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('PMPro Login Form', 'dlx-pmpro-turnstile'),
         className: "dlx-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
-          _onChange7(boolValue);
+          _onChange8(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable Cloudflare Turnstile on the PMPro Login Form.', 'dlx-pmpro-turnstile')
       });
@@ -19224,16 +19250,16 @@ var Interface = function Interface(props) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_6__.Controller, {
     name: "enabledWPLoginForm",
     control: control,
-    render: function render(_ref8) {
-      var _ref8$field = _ref8.field,
-        _onChange8 = _ref8$field.onChange,
-        value = _ref8$field.value;
+    render: function render(_ref9) {
+      var _ref9$field = _ref9.field,
+        _onChange9 = _ref9$field.onChange,
+        value = _ref9$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('WP Login Form', 'dlx-pmpro-turnstile'),
         className: "dlx-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
-          _onChange8(boolValue);
+          _onChange9(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable Cloudflare Turnstile on the default WP Login Form.', 'dlx-pmpro-turnstile')
       });
@@ -19241,25 +19267,44 @@ var Interface = function Interface(props) {
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "dlx-admin__row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_6__.Controller, {
+    name: "enabledWPPasswordResetForm",
+    control: control,
+    render: function render(_ref10) {
+      var _ref10$field = _ref10.field,
+        _onChange10 = _ref10$field.onChange,
+        value = _ref10$field.value;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('WP Password Reset Form', 'dlx-pmpro-turnstile'),
+        className: "dlx-admin__toggle-control",
+        checked: value,
+        onChange: function onChange(boolValue) {
+          _onChange10(boolValue);
+        },
+        help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable Cloudflare Turnstile on the default password reset screen.', 'dlx-pmpro-turnstile')
+      });
+    }
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+    scope: "row"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Checkout Form', 'dlx-pmpro-turnstile')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "dlx-admin__row"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_hook_form__WEBPACK_IMPORTED_MODULE_6__.Controller, {
     name: "enabledCheckoutForm",
     control: control,
-    render: function render(_ref9) {
-      var _ref9$field = _ref9.field,
-        _onChange9 = _ref9$field.onChange,
-        value = _ref9$field.value;
+    render: function render(_ref11) {
+      var _ref11$field = _ref11.field,
+        _onChange11 = _ref11$field.onChange,
+        value = _ref11$field.value;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["default"], {
         label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Checkout Form', 'dlx-pmpro-turnstile'),
         className: "dlx-admin__toggle-control",
         checked: value,
         onChange: function onChange(boolValue) {
-          _onChange9(boolValue);
+          _onChange11(boolValue);
         },
         help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable Cloudflare Turnstile on the PMPro Checkout Form.', 'dlx-pmpro-turnstile')
       });
     }
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
-    scope: "row"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Exclusions', 'dlx-pmpro-turnstile')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  })), getValues('enabledCheckoutForm') && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "dlx-admin__row"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_11__["default"], {
     id: "excludedMembershipLevelsBase",
@@ -19274,14 +19319,14 @@ var Interface = function Interface(props) {
       key: levelId,
       name: "excludedMembershipLevels[".concat(levelId, "]"),
       control: control,
-      render: function render(_ref10) {
-        var _onChange10 = _ref10.field.onChange;
+      render: function render(_ref12) {
+        var _onChange12 = _ref12.field.onChange;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
           label: level.name,
           className: "dlx-admin__checkbox-control",
           checked: currentValue,
           onChange: function onChange(boolValue) {
-            _onChange10(boolValue);
+            _onChange12(boolValue);
           }
         });
       }
@@ -19301,19 +19346,19 @@ var Interface = function Interface(props) {
       key: levelId,
       name: "excludedCheckoutLevels[".concat(levelId, "]"),
       control: control,
-      render: function render(_ref11) {
-        var _onChange11 = _ref11.field.onChange;
+      render: function render(_ref13) {
+        var _onChange13 = _ref13.field.onChange;
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_12__["default"], {
           label: level.name,
           className: "dlx-admin__checkbox-control",
           checked: currentValue,
           onChange: function onChange(boolValue) {
-            _onChange11(boolValue);
+            _onChange13(boolValue);
           }
         });
       }
     });
-  }))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_SaveResetButtons__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  })))))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_SaveResetButtons__WEBPACK_IMPORTED_MODULE_5__["default"], {
     formValues: formValues,
     setError: setError,
     reset: reset,
@@ -72521,6 +72566,7 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
+var __webpack_exports__ = {};
 /*!*******************************!*\
   !*** ./src/js/react/index.js ***!
   \*******************************/
@@ -72535,6 +72581,17 @@ __webpack_require__.r(__webpack_exports__);
 var container = document.getElementById('dlx-pmpro-turnstile');
 var root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(container);
 root.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_views_Main__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
+})();
+
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+/*!*****************************!*\
+  !*** ./src/scss/admin.scss ***!
+  \*****************************/
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
 })();
 
 /******/ })()

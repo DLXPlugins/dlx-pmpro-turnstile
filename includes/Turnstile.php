@@ -50,7 +50,12 @@ class Turnstile {
 	 */
 	public function check_turnstile_token( $user_object = null, $password = '' ) {
 		if ( Functions::can_show_turnstile() ) {
-			$can_proceed = false; // Guilty until proven innocent.
+			// Get options.
+			$options = Options::get_options();
+
+			// Guilty until proven innocent.
+			$can_proceed = false;
+
 			// If there's a turnstile token, I suppose that means we should validate it.
 			$maybe_token = filter_input( INPUT_POST, 'cf-turnstile-response', FILTER_DEFAULT );
 
@@ -58,9 +63,12 @@ class Turnstile {
 			if ( $maybe_token ) {
 
 				$cloudflare_endpoint_api = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-				$secret_key              = '2x0000000000000000000000000000000AA'; // todo: make option.
-				// always passes: 1x0000000000000000000000000000000AA
-				// always fails: 2x0000000000000000000000000000000AA
+
+				/**
+				 * Always passes: 1x0000000000000000000000000000000AA
+				 * Always fails: 2x0000000000000000000000000000000AA
+				 */
+				$secret_key = $options['secretKey'] ?? '';
 
 				// Build data envelope.
 				$data = array(
@@ -78,7 +86,6 @@ class Turnstile {
 
 				// If error, show response.
 				if ( is_wp_error( $response ) ) {
-					// todo - error.
 					$can_proceed = false;
 				}
 
@@ -86,8 +93,7 @@ class Turnstile {
 				$body = json_decode( wp_remote_retrieve_body( $response ), true );
 
 				// If not a success, error.
-				if ( ! $body['success'] ) {
-					// todo - error.
+				if ( $can_proceed && ! $body['success'] ) {
 					$can_proceed = false;
 				} else {
 					return $user_object;
@@ -148,7 +154,7 @@ class Turnstile {
 			// Build PMPRo compatible error message.
 			$verification_message = __( 'Cloudflare Turnstile verification failed. Please try again.', 'dlx-pmpro-turnstile' );
 
-			$html = '<div id="pmpro_message" class="pmpro_message pmpro_error">';
+			$html  = '<div id="pmpro_message" class="pmpro_message pmpro_error">';
 			$html .= esc_html( $verification_message );
 			$html .= '</div>';
 		}
@@ -160,20 +166,35 @@ class Turnstile {
 	 * Enqueue turnstile scripts.
 	 */
 	public function enqueue_scripts() {
-		// Enqueue challenge script.
+		// Retrieve options.
+		$options = Options::get_options();
+
+		// Enqueue Turnstile script.
 		wp_enqueue_script(
-			'pmpro-turnstile-cloudflare',
-			'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onLoadDLXPMProTurnstileCallback',
+			'dlx-pmpro-turnstile-js',
+			Functions::get_plugin_url( 'dist/dlx-pmpro-cloudflare-turnstile.js' ),
 			array(),
 			Functions::get_plugin_version(),
 			true
 		);
+		wp_localize_script(
+			'dlx-pmpro-turnstile-js',
+			'dlxPMPRoTurnstile',
+			array(
+				'enabled'          => (bool) $options['enabled'],
+				'siteKey'          => $options['siteKey'],
+				'language'         => $options['language'],
+				'widgetTheme'      => $options['widgetTheme'],
+				'widgetAppearance' => $options['widgetAppearance'],
+				'widgetSize'       => $options['widgetSize'],
+			)
+		);
 
-		// Enqueue Turnstile script.
+		// Enqueue challenge script.
 		wp_enqueue_script(
-			'pmpro-turnstile',
-			Functions::get_plugin_url( 'dist/dlx-pmpro-cloudflare-turnstile.js' ),
-			array(),
+			'dlx-pmpro-turnstile-cf',
+			'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onLoadDLXPMProTurnstileCallback',
+			array( 'dlx-pmpro-turnstile-js' ),
 			Functions::get_plugin_version(),
 			true
 		);

@@ -42,7 +42,7 @@ window.onLoadDLXPMProTurnstileCallback = function () {
     var maxRetries = 5;
     // eslint-disable-next-line no-undef
     var widgetId = turnstile.render('#dlx-pmpro-turnstile', {
-      sitekey: '1x00000000000000000000AA',
+      sitekey: dlxPMPRoTurnstile.siteKey,
       retry: 'never',
       callback: function callback(token) {
         // Re-enable the submit button.
@@ -98,11 +98,12 @@ window.onLoadDLXPMProTurnstileCallback = function () {
           document.querySelector('.pmpro_captcha_verification_error').remove();
         }, 10000);
       },
-      size: 'normal',
-      /* can be compact. Todo - make option */
-      theme: 'light',
-      /* can be light, dark, auto. Todo - make option */
-      language: 'auto' /* todo - make option */
+      size: dlxPMPRoTurnstile.widgetSize,
+      /* can be compact|normal. */
+      theme: dlxPMPRoTurnstile.widgetTheme,
+      /* can be light, dark, auto */
+      language: dlxPMPRoTurnstile.language,
+      appearance: dlxPMPRoTurnstile.widgetAppearance /* can be always|execute|`interaction-only` */
     });
   };
 

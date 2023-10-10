@@ -84,9 +84,16 @@ class Admin {
 			);
 		}
 
-		// Reset options.
+		// Get existing options.
+		$options = Options::get_options();
+
+		// Get defaults and reset.
 		$default_options = Options::get_defaults();
 		Options::update_options( $default_options );
+
+		// Pull in nonces to default options before returning.
+		$default_options['saveNonce']  = $options['saveNonce'];
+		$default_options['resetNonce'] = $options['resetNonce'];
 
 		// Format empty arrays into false. This is so they can be reset at the form level.
 		$default_options['membershipLevelsToExclude'] = false;
@@ -98,7 +105,7 @@ class Admin {
 				'message'     => __( 'Options reset.', 'dlx-pmpro-turnstile' ),
 				'type'        => 'success',
 				'dismissable' => true,
-				'formData'	=> $default_options,
+				'formData'    => $default_options,
 			)
 		);
 	}
@@ -164,11 +171,20 @@ class Admin {
 			'dlx-pmpro-turnstile-admin',
 			'dlxPMProTurnstileAdmin',
 			array(
-				'getNonce'  => wp_create_nonce( 'dlx-pmpro-turnstile-admin-get-options' ),
-				'saveNonce' => wp_create_nonce( 'dlx-pmpro-turnstile-admin-save-options' ),
+				'getNonce'   => wp_create_nonce( 'dlx-pmpro-turnstile-admin-get-options' ),
+				'saveNonce'  => wp_create_nonce( 'dlx-pmpro-turnstile-admin-save-options' ),
 				'resetNonce' => wp_create_nonce( 'dlx-pmpro-turnstile-admin-reset-options' ),
-				'levels' => $levels,
+				'levels'     => $levels,
 			)
+		);
+
+		// Enqueue admin styles.
+		wp_enqueue_style(
+			'dlx-pmpro-turnstile-admin-css',
+			Functions::get_plugin_url( 'dist/dlx-pmpro-cloudflare-turnstile-admin.css' ),
+			array(),
+			Functions::get_plugin_version(),
+			'all'
 		);
 	}
 

@@ -5,7 +5,8 @@
 		"wpApiSettings": true,
 		"window": true,
 		"document": true,
-		"dlxPMProTurnstileAdmin": "readonly"
+		"dlxPMProTurnstileAdmin": "readonly",
+		"dlxPMPRoTurnstile": "readonly"
 	},
 	"env": {
 		"browser": true,
