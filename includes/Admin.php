@@ -89,7 +89,7 @@ class Admin {
 
 		// Get defaults and reset.
 		$default_options = Options::get_defaults();
-		//Options::update_options( $default_options );
+		Options::update_options( $default_options );
 
 		// Pull in nonces to default options before returning.
 		$default_options['saveNonce']  = $options['saveNonce'];

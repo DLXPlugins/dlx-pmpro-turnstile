@@ -32,6 +32,9 @@ class Turnstile {
 		// Add turnstile to the main wp login form.
 		add_action( 'login_form', array( $this, 'output_turnstile_html' ) );
 
+		// Add turnstile to the main wp password reset form.
+		add_action( 'lostpassword_form', array( $this, 'output_turnstile_html' ) );
+
 		// Hook into checkout process and check Turnstile token.
 		add_action( 'pmpro_checkout_before_processing', array( $this, 'check_turnstile_token' ), 1 ); // Run super early.
 
@@ -40,6 +43,65 @@ class Turnstile {
 
 		// Check turnstile token for login authentication.
 		add_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 1, 2 ); // Run super early.
+
+		// Add turnstile output to footer if on login page.
+		add_action( 'wp_footer', array( $this, 'maybe_output_footer_html' ) );
+
+		// For intercepting lost password requests.
+		add_filter( 'allow_password_reset', array( $this, 'allow_password_reset' ), 10, 2 );
+
+		// Init in to add PMPro error messages if password reset fails.
+		add_action( 'the_content', array( $this, 'output_password_reset_failure' ) );
+	}
+
+	/**
+	 * Set error messages if password reset fails.
+	 */
+	public function output_password_reset_failure( $content ) {
+		global $pmpro_msg, $pmpro_msgt, $pmpro_error_fields;
+
+		$action = filter_input( INPUT_GET, 'action', FILTER_DEFAULT );
+		$errors = filter_input( INPUT_GET, 'errors', FILTER_DEFAULT );
+
+		if ( 'reset_pass' === $action && 'no_password_reset' === $errors ) {
+			ob_start();
+			?>
+				<div class="pmpro_message pmpro_error">
+					<?php echo esc_html__( 'Captcha Verification failed. Please try again.', 'pmpro-turnstile' ); ?>
+				</div>
+			<?php
+			$content = ob_get_clean() . $content;
+		}
+		return $content;
+	}
+
+	/**
+	 * Allow password reset.
+	 *
+	 * @param bool $allow    Whether to allow the password to be reset. Default true.
+	 * @param int  $user_id  The ID of the user attempting to reset a password.
+	 *
+	 * @return bool true or false.
+	 */
+	public function allow_password_reset( $allow, $user_id ) {
+		if ( Functions::can_show_turnstile() ) {
+			$token_check = $this->check_turnstile_token();
+			if ( \is_wp_error( $token_check ) || ! $token_check ) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return $allow;
+	}
+
+	/**
+	 * Maybe output Turnstile HTML for pmpro's lost password form.
+	 */
+	public function maybe_output_footer_html() {
+		if ( Functions::can_show_turnstile() ) {
+			$this->output_turnstile_html();
+		}
 	}
 
 	/**
@@ -47,6 +109,8 @@ class Turnstile {
 	 *
 	 * @param \WP_User $user_object The user object.
 	 * @param string   $password    The user's password.
+	 *
+	 * @return bool true or false if token succeeded.
 	 */
 	public function check_turnstile_token( $user_object = null, $password = '' ) {
 		if ( Functions::can_show_turnstile() ) {
@@ -92,18 +156,21 @@ class Turnstile {
 				// Get body.
 				$body = json_decode( wp_remote_retrieve_body( $response ), true );
 
+				$is_success = $body['success'] ?? false;
 				// If not a success, error.
-				if ( $can_proceed && ! $body['success'] ) {
+				if ( $can_proceed && ! $is_success ) {
 					$can_proceed = false;
+				} elseif ( $can_proceed && $is_success ) {
+					$can_proceed = true;
 				} else {
-					return $user_object;
+					$can_proceed = false;
 				}
 			}
 		}
 
 		// Can we go?
 		if ( true === $can_proceed ) {
-			return $user_object;
+			return $can_proceed;
 		}
 
 		// If not, cloudflare validation failed. Set globals.
@@ -114,7 +181,7 @@ class Turnstile {
 		$pmpro_msgt         = 'pmpro_error';
 		$pmpro_error_fields = array( 'cf-turnstile-response' );
 
-		return new \WP_Error( 'pmpro-turnstile-error', __( 'Cloudflare Turnstile verification failed. Please try again.', 'pmpro-turnstile' ) );
+		return false;
 	}
 
 	/**

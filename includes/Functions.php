@@ -74,6 +74,25 @@ class Functions {
 		$login_page_id    = self::get_login_page_id();
 		$checkout_page_id = self::get_checkout_page_id();
 
+		/**
+		 * Determine if we're on a checkout page.
+		 */
+		$is_checkout_page = false;
+		// See if checkout page and current page match. If so, we're on a checkout page.
+		if ( $current_page === $checkout_page_id ) {
+			$is_checkout_page = true;
+		}
+
+		$options = Options::get_options();
+
+		// If we're on a checkout page, check to see if turnstile is even enabled for checkout.
+		if ( $is_checkout_page ) {
+			$options = Options::get_options();
+			if ( ! (bool) $options['enabledCheckoutForm'] ) {
+				return false;
+			}
+		}
+
 		// Retrieve options.
 		$options = Options::get_options();
 
@@ -120,6 +139,14 @@ class Functions {
 				$pmpro_login_page_context = 'wplogin';
 			}
 
+			// Get action to determine which screen we're in.
+			$action = filter_input( INPUT_GET, 'action', FILTER_DEFAULT );
+			if ( null !== $action ) {
+				if ( 'reset_pass' === $action ) {
+					$pmpro_login_page_context = 'resetpass';
+				}
+			}
+
 			/**
 			 * Filter whether to show the turnstile.
 			 *
@@ -162,7 +189,7 @@ class Functions {
 
 		// Get checkout levels to exclude.
 		$checkout_levels_to_exclude = (array) $options['excludedCheckoutLevels'];
-
+		
 		// Get the indexed checkout level.
 		$checkout_level = $checkout_levels_to_exclude[ $checkout_level ] ?? 0;
 		if ( true === $checkout_level ) {

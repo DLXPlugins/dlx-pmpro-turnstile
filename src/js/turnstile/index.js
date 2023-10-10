@@ -2,12 +2,32 @@
  * Turnstile JS functionality.
  */
 
+const addTurnstileToPasswordForm = () => {
+	// On document load, move #dlx-pmpro-turnstile inside the form.
+	const pmproTurnstileContainer = document.querySelector( '#dlx-pmpro-turnstile' );
+	if ( null === pmproTurnstileContainer ) {
+		return;
+	}
+
+	// Get closest form, and append right before the submit button.
+	const pmproForm = document.querySelector( '#lostpasswordform' );
+	if ( pmproForm ) {
+		const submitButton = pmproForm.querySelector( 'input[type="submit"]' );
+		if ( submitButton ) {
+			submitButton.insertAdjacentElement( 'beforebegin', pmproTurnstileContainer );
+		}
+	}
+};
+
 /**
  * This is the main callback for Cloudflare.
  */
 window.onLoadDLXPMProTurnstileCallback = () => {
+	// Try to add Turnstile to main form.
+	addTurnstileToPasswordForm();
+
 	// Get the submit button. If not found, bail.
-	const submitButtonSelector = '.login-submit input[type="submit"], #pmpro_submit_span input[type="submit"], #loginform input[type="submit"]';
+	const submitButtonSelector = '.login-submit input[type="submit"], #pmpro_submit_span input[type="submit"], #loginform input[type="submit"], #lostpasswordform input[type="submit"], #registerform input[type="submit"]';
 
 	const submitButton = document.querySelector( submitButtonSelector );
 	if ( null === submitButton ) {
@@ -108,3 +128,4 @@ window.onLoadDLXPMProTurnstileCallback = () => {
 	// Set up the textarea event. Render Turnstile immediately.
 	turnstileBeginRender();
 };
+
