@@ -176,7 +176,7 @@ class Turnstile {
 
 		// Can we go?
 		if ( true === $can_proceed ) {
-			return $can_proceed;
+			return $user_object;
 		}
 
 		// If not, cloudflare validation failed. Set globals.
