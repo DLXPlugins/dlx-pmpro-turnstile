@@ -102,7 +102,7 @@ const SaveResetButtons = ( props ) => {
 			<div className="dlx-pmpro-turnstile-admin-buttons">
 				<Button
 					className={ classNames(
-						'ajaxify__btn ajaxify__btn-primary ajaxify__btn--icon-right',
+						'dlx-pmpro__btn dlx-pmpro__btn-primary dlx-pmpro__btn--icon-right',
 						{ 'has-error': hasErrors() },
 						{ 'has-icon': saving || isSaved },
 						{ 'is-saving': saving && ! isSaved },
@@ -125,7 +125,7 @@ const SaveResetButtons = ( props ) => {
 				/>
 				<Button
 					className={ classNames(
-						'ajaxify__btn ajaxify__btn-danger ajaxify__btn--icon-right',
+						'dlx-pmpro__btn dlx-pmpro__btn-danger dlx-pmpro__btn--icon-right',
 						{ 'has-icon': resetting },
 						{ 'is-resetting': { resetting } },
 					) }

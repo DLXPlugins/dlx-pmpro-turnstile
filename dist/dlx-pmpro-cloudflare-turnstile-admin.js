@@ -18440,7 +18440,7 @@ var SaveResetButtons = function SaveResetButtons(props) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "dlx-pmpro-turnstile-admin-buttons"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["default"], {
-    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()('ajaxify__btn ajaxify__btn-primary ajaxify__btn--icon-right', {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()('dlx-pmpro__btn dlx-pmpro__btn-primary dlx-pmpro__btn--icon-right', {
       'has-error': hasErrors()
     }, {
       'has-icon': saving || isSaved
@@ -18481,7 +18481,7 @@ var SaveResetButtons = function SaveResetButtons(props) {
       };
     }()
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["default"], {
-    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()('ajaxify__btn ajaxify__btn-danger ajaxify__btn--icon-right', {
+    className: classnames__WEBPACK_IMPORTED_MODULE_2___default()('dlx-pmpro__btn dlx-pmpro__btn-danger dlx-pmpro__btn--icon-right', {
       'has-icon': resetting
     }, {
       'is-resetting': {
