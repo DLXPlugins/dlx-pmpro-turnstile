@@ -85,7 +85,6 @@ const SnackPop = ( props ) => {
 				}
 				if ( 'critical' === type ) {
 					setIsSnackbarVisible( false );
-					setNotificationOptions( snackbarDefaults );
 					setIsModalVisible( true );
 				} else {
 					clearTimeout( snackbarTimeout );

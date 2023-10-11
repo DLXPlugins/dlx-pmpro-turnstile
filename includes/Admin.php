@@ -44,8 +44,9 @@ class Admin {
 			wp_send_json_error(
 				array(
 					'message'     => __( 'Nonce or permission verification failed.', 'dlx-pmpro-turnstile' ),
-					'type'        => 'error',
+					'type'        => 'critical',
 					'dismissable' => true,
+					'title'       => __( 'Error', 'dlx-pmpro-turnstile' ),
 				)
 			);
 		}
@@ -80,6 +81,7 @@ class Admin {
 					'message'     => __( 'Nonce or permission verification failed.', 'dlx-pmpro-turnstile' ),
 					'type'        => 'error',
 					'dismissable' => true,
+					'title'       => __( 'Error', 'dlx-pmpro-turnstile' ),
 				)
 			);
 		}
@@ -125,6 +127,7 @@ class Admin {
 					'message'     => __( 'Nonce or permission verification failed.', 'dlx-pmpro-turnstile' ),
 					'type'        => 'error',
 					'dismissable' => true,
+					'title'       => __( 'Error', 'dlx-pmpro-turnstile' ),
 				)
 			);
 		}
@@ -193,9 +196,42 @@ class Admin {
 	 */
 	public function admin_page() {
 		?>
-		<div class="wrap">
-			<h2 id="dlx-pmpro-turnstile-admin-header"><?php esc_html_e( 'Turnstile', 'pmpro-turnstile' ); ?></h2>
-			<div id="dlx-pmpro-turnstile"></div>
+		<div class="dlx-pmpro-turnstile-admin-wrap">
+			<header class="dlx-pmpro-turnstile-admin-header">
+				<div class="dlx-pmpro-turnstile-logo">
+					<h2 id="dlx-pmpro-turnstile-admin-header">
+						<img src="<?php echo esc_url( Functions::get_plugin_url( 'assets/dlx-pmpro-banner.png' ) ); ?>" alt="PMPro Turnstile" />
+					</h2>
+				</div>
+			</header>
+			<?php
+			$current_tab        = Functions::get_admin_tab();
+			$settings_tab_class = array( 'nav-tab' );
+			if ( null === $current_tab || 'settings' === $current_tab ) {
+				$settings_tab_class[] = 'nav-tab-active';
+			}
+			$license_tab_class = array( 'nav-tab' );
+			if ( 'license' === $current_tab ) {
+				$license_tab_class[] = 'nav-tab-active';
+			}
+			?>
+			<main class="dlx-pmpro-turnstile-admin-body-wrapper">
+				<div class="has-admin-container-body">
+					<nav class="nav-tab-wrapper">
+						<a  class="<?php echo esc_attr( implode( ' ', $settings_tab_class ) ); ?>" href="<?php echo esc_url( Functions::get_settings_url() ); ?>"><?php esc_html_e( 'Settings', 'dlx-pmpro-turnstile' ); ?></a>
+						<a  class="<?php echo esc_attr( implode( ' ', $license_tab_class ) ); ?>" href="<?php echo esc_url( Functions::get_settings_url( 'license' ) ); ?>"><?php esc_html_e( 'License', 'dlx-pmpro-turnstile' ); ?></a>
+					</nav>
+				</div>
+				<div class="dlx-pmpro-turnstile-body__content">
+					<?php
+					if ( null === $current_tab || 'settings' === $current_tab ) {
+						?>
+							<div id="dlx-pmpro-turnstile"></div>
+						<?php
+					}
+					?>
+				</div>
+			</main>
 		</div>
 		<?php
 	}

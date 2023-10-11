@@ -45,8 +45,7 @@ const Main = ( props ) => {
 		<Suspense
 			fallback={
 				<>
-					<h2>{ __( 'Comment Editing', 'dlx-pmpro-turnstile' ) }</h2>
-					Loading
+					<h2>{ __( 'Loading…', 'dlx-pmpro-turnstile' ) }</h2>
 				</>
 			}
 		>
@@ -94,6 +93,14 @@ const Interface = ( props ) => {
 
 	return (
 		<>
+			<div className="dlx-pmpro-turnstile-admin-content-heading">
+				<h1><span className="dlx-pmpro-turnstile-content-heading-text">{ __( 'Turnstile Settings for Paid Membership Pro', 'dlx-pmpro-turnstile' ) }</span></h1>
+				<p className="description">
+					{
+						__( 'Configure the settings for the Cloudflare Turnstile integration with Paid Membership Pro. If you need help, please use the help tab above.', 'dlx-pmpro-turnstile' )
+					}
+				</p>
+			</div>
 			{ /* eslint-disable-next-line no-unused-vars */ }
 			<form onSubmit={ handleSubmit( ( formData ) => { } ) }>
 				<div id="dlx-pmpro-turnstile-admin-table">
