@@ -140,18 +140,22 @@ class Plugin_License {
 				// Clear license.
 				$options = wp_parse_args(
 					array(
-						'licenseKey'   => '',
-						'licenseValid' => false,
-						'licenseData'  => array(),
+						'licenseKey'    => '',
+						'licenseValid'  => false,
+						'licenseData'   => array(),
+						'licenseActive' => false,
 					),
 					$options
 				);
 			} else {
-				$options = wp_parse_args(
+				$options      = wp_parse_args(
 					array(
-						'licenseKey'   => $response['license_key'] ?? '',
-						'licenseValid' => $response['license'] ?? '', // Response for $license is a valid or invalid string.
-						'priceId'      => $response['price_id'] ?? '',
+						'licenseKey'    => $response['license_key'] ?? '',
+						'licenseValid'  => $response['license'] ?? '', // Response for $license is a valid or invalid string.
+						'priceId'       => $response['price_id'] ?? '',
+						'licenseActive' => $response['license'] ?? false,
+						'licenseData'   => $response,
+
 					),
 					$options
 				);

@@ -9,6 +9,11 @@ import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import { useAsyncResource } from 'use-async-resource';
 import { KeyRound, BadgeCheck, EyeOff, View, AlertCircle, Loader2 } from 'lucide-react';
 import classNames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye as EyeIcon, faCircleCheck as CircleCheck, faKey as Key } from '@fortawesome/free-solid-svg-icons';
+import { faEyeSlash as EyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
+import { faCircleExclamation as CircularExclamation } from '@fortawesome/free-solid-svg-icons/faCircleExclamation';
+import { faLoader as Loader } from '@fortawesome/pro-duotone-svg-icons/faLoader';
 
 // Local imports.
 import SendCommand from '../../utils/SendCommand';
@@ -43,7 +48,7 @@ const Interface = ( props ) => {
 	const response = defaults();
 	const { data } = response.data;
 
-	const [ showSecret, setShowSecret ] = useState( data.licenseActivated ? false : true );
+	const [ showSecret, setShowSecret ] = useState( data.licenseValid ? false : true );
 	const [ licenseData, setLicenseData ] = useState( data.licenseData );
 	const [ saving, setSaving ] = useState( false );
 	const [ isSaved, setIsSaved ] = useState( false );
@@ -52,11 +57,12 @@ const Interface = ( props ) => {
 	const [ revokingLicense, setRevokingLicense ] = useState( false );
 	const [ isRevoked, setIsRevoked ] = useState( false );
 	const [ validLicense, setValidLicense ] = useState( data.licenseKey );
-	const [ licenseActivated, setLicenseActivated ] = useState( data.licenseActivated );
 
 	const hasErrors = () => {
 		return Object.keys( errors ).length > 0;
 	};
+
+	console.log( licenseData );
 
 	const {
 		control,
@@ -84,13 +90,12 @@ const Interface = ( props ) => {
 			excludedCheckoutLevels: data.excludedCheckoutLevels ?? [],
 			saveNonce: dlxPMProTurnstileAdminLicense.saveNonce,
 			revokeNonce: dlxPMProTurnstileAdminLicense.revokeNonce,
-			licenseActivated: data.licenseActivated,
+			licenseValid: data.licenseValid,
 			licenseKey: data.licenseKey,
 			priceId: data.priceId,
 		},
 	} );
 
-	console.log( licenseData );
 
 	const formValues = useWatch( { control } );
 	const { errors, isDirty, dirtyFields } = useFormState( {
@@ -108,14 +113,13 @@ const Interface = ( props ) => {
 				const ajaxData = ajaxResponse.data.data;
 				const ajaxSuccess = ajaxResponse.data.success;
 
-				setLicenseData( ajaxData );
+				
 				if ( ajaxSuccess ) {
-					if ( ajaxData.licenseActivated ) {
-						setLicenseActivated( true );
-					} else {
-						setLicenseActivated( false );
-					}
-
+					reset( ajaxData, {
+						keepErrors: false,
+						keepDirty: false,
+					} );
+					setLicenseData( ajaxData );
 					setIsSaved( true );
 
 					// Reset count.
@@ -147,9 +151,11 @@ const Interface = ( props ) => {
 				const ajaxSuccess = ajaxResponse.data.success;
 				if ( ajaxSuccess ) {
 					// // Reset count.
-					setLicenseActivated( false );
 					setIsRevoked( true );
-					setValue( 'licenseKey', '' );
+					reset( ajaxData, {
+						keepErrors: false,
+						keepDirty: false,
+					} );
 					setTimeout( () => {
 						setIsRevoked( false );
 					}, 3000 );
@@ -161,7 +167,6 @@ const Interface = ( props ) => {
 							'dlx-pmpro-turnstile'
 						),
 					} );
-					setLicenseActivated( false );
 				}
 			} )
 			.catch( ( ajaxResponse ) => {} )
@@ -196,13 +201,13 @@ const Interface = ( props ) => {
 	 * @return {React.ReactElement} Notice.
 	 */
 	const getLicenseNotice = () => {
-		if ( getValues( 'licenseActivated' ) ) {
+		if ( getValues( 'licenseValid' ) ) {
 			return (
 				<Notice
 					message={ __( 'Your license is valid. Thank you so much for purchasing a license.', 'dlx-pmpro-turnstile' ) }
 					status="success"
 					politeness="polite"
-					icon={ () => <BadgeCheck fill="none" color="currentColor" /> }
+					icon={ () => <FontAwesomeIcon icon={ CircleCheck } style={ { color: 'currentColor' } } /> }
 				/>
 			);
 		}
@@ -214,7 +219,7 @@ const Interface = ( props ) => {
 				) }
 				status="warning"
 				politeness="polite"
-				icon={ () => <KeyRound fill="none" color="#333333" /> }
+				icon={ () => <FontAwesomeIcon icon={ Key } style={ { color: 'currentColor' } } /> }
 			/>
 		);
 	};
@@ -223,7 +228,7 @@ const Interface = ( props ) => {
 		let saveText = __( 'Save License', 'dlx-pmpro-turnstile' );
 		let saveTextLoading = __( 'Saving…', 'dlx-pmpro-turnstile' );
 
-		if ( ! getValues( 'licenseActivated' ) ) {
+		if ( ! getValues( 'licenseValid' ) ) {
 			saveText = __( 'Activate License', 'dlx-pmpro-turnstile' );
 			saveTextLoading = __( 'Activating…', 'dlx-pmpro-turnstile' );
 		}
@@ -238,10 +243,11 @@ const Interface = ( props ) => {
 					) }
 					type="submit"
 					text={ saving ? saveTextLoading : saveText }
-					icon={ saving ? () => <Loader2 color="currentColor" fill="none" /> : false }
+					icon={ saving ? <FontAwesomeIcon icon={ Loader } style={ { color: 'currentColor' } } /> : false }
 					iconSize="18"
 					iconPosition="right"
 					disabled={ saving || revokingLicense }
+					variant="primary"
 				/>
 			</>
 		);
@@ -282,7 +288,7 @@ const Interface = ( props ) => {
 										}
 									) }
 									onChange={ onChange }
-									disabled={ getValues( 'licenseActivated' ) }
+									disabled={ getValues( 'licenseValid' ) }
 									aria-required="true"
 									help={ __(
 										'Entering a license will enable support and updates.',
@@ -322,30 +328,30 @@ const Interface = ( props ) => {
 										<Button
 											label={ __( 'Show License', 'dlx-pmpro-turnstile' ) }
 											size={ 20 }
-											icon={ () => <View fill="none" color="currentColor" /> }
+											icon={ () => <FontAwesomeIcon icon={ EyeIcon } style={ { color: 'currentColor' } } /> }
 											className="button-reset"
 										/>
 									) : (
 										<Button
 											label={ __( 'Hide License', 'dlx-pmpro-turnstile' ) }
 											size={ 20 }
-											icon={ () => <EyeOff fill="none" color="currentColor" /> }
+											icon={ () => <FontAwesomeIcon icon={ EyeSlash } style={ { color: 'currentColor' } } /> }
 											className="button-reset"
 										/>
 									) }
 								</span>
 							</label>
 						</div>
-						{ 'required' === errors.sceLicense?.type && (
+						{ 'required' === errors.licenseKey?.type && (
 							<Notice
 								message={ __( 'This field is a required field.' ) }
 								status="error"
 								politeness="assertive"
 								inline={ true }
-								icon={ () => <AlertCircle fill="none" color="currentColor" /> }
+								icon={ () => <FontAwesomeIcon icon={ CircularExclamation } style={ { color: 'currentColor' } } /> }
 							/>
 						) }
-						{ 'pattern' === errors.sceLicense?.type && (
+						{ 'pattern' === errors.licenseKey?.type && (
 							<Notice
 								message={ __(
 									'It appears there are invalid characters in the license.'
@@ -353,25 +359,32 @@ const Interface = ( props ) => {
 								status="error"
 								politeness="assertive"
 								inline={ true }
-								icon={ () => <AlertCircle fill="none" color="currentColor" /> }
+								icon={ () => <FontAwesomeIcon icon={ CircularExclamation } style={ { color: 'currentColor' } } /> }
 							/>
 						) }
-						{ 'validate' === errors.sceLicense?.type && (
+						{ 'validate' === errors.licenseKey?.type && (
 							<Notice
-								message={ errors.sceLicense.message }
+								message={ errors.licenseKey.message }
 								status="error"
 								politeness="assertive"
 								inline={ true }
-								icon={ () => <AlertCircle fill="none" color="currentColor" /> }
+								icon={ () => <FontAwesomeIcon icon={ CircularExclamation } style={ { color: 'currentColor' } } /> }
 							/>
 						) }
 					</div>
-					<div className="dlx-admin__tabs--content-actions dlx-admin-buttons">
-						{ ! getValues( 'licenseActivated' ) && getSaveButton() }
-						{ getValues( 'licenseActivated' ) && (
+					<div
+						className={ classNames(
+							'dlx-admin__tabs--content-actions dlx-admin-buttons dlx-pmpro-turnstile-admin-buttons',
+							{
+								'can-revoke': getValues( 'licenseValid' ),
+							}
+						) }
+					>
+						{ ! getValues( 'licenseValid' ) && getSaveButton() }
+						{ getValues( 'licenseValid' ) && (
 							<Button
 								className={ classNames(
-									'qdlx__btn qdlx__btn-danger qdlx__btn--icon-right',
+									'dlx-pmpro__btn dlx-pmpro__btn-danger dlx-pmpro__btn--icon-right',
 									{ 'has-icon': revokingLicense },
 									{ 'is-resetting': { revokingLicense } }
 								) }
@@ -381,7 +394,7 @@ const Interface = ( props ) => {
 										? __( 'Revoking License…', 'dlx-pmpro-turnstile' )
 										: __( 'Revoke License', 'dlx-pmpro-turnstile' )
 								}
-								icon={ revokingLicense ? () => <Loader2 color="currentColor" fill="none" /> : false }
+								icon={ revokingLicense ? <FontAwesomeIcon icon={ Loader } style={ { color: 'currentColor' } } /> : false }
 								iconSize="18"
 								iconPosition="right"
 								disabled={ saving || revokingLicense }
@@ -389,6 +402,8 @@ const Interface = ( props ) => {
 									setRevokingLicense( true );
 									revokeLicense( e );
 								} }
+								isDestructive={ true }
+								variant="secondary"
 							/>
 						) }
 					</div>
@@ -420,20 +435,20 @@ const Interface = ( props ) => {
 						/>
 					) }
 				</div>
-				{ licenseActivated && (
+				{ getValues( 'licenseValid' ) && (
 					<>
-						<div className="sce-admin-panel-area">
-							<div className="sce-panel-row">
-								<div className="sce-admin__tabs--content-wrap">
-									<div className="sce-admin__tabs--content-panel">
-										<div className="sce-admin__tabs--content-heading">
-											<h2>
-												<span className="sce-admin__heading--text">
+						<div className="dlx-admin-admin-panel-area">
+							<div className="dlx-admin-panel-row">
+								<div className="dlx-admin-admin__tabs--content-wrap">
+									<div className="dlx-admin-admin__tabs--content-panel">
+										<div className="dlx-admin-admin__tabs--content-heading">
+											<h1>
+												<span className="dlx-admin-admin__heading--text">
 													{ __( 'License Information', 'dlx-pmpro-turnstile' ) }
 												</span>
-											</h2>
+											</h1>
 										</div>
-										<div className="sce-admin__tabs--content-inner">
+										<div className="dlx-admin-admin__tabs--content-inner">
 											<table className="dlx-pmpro-turnstile-table dlx-pmpro-turnstile-table--responsive dlx-pmpro-turnstile-table--license-ui">
 												<thead>
 													<tr>

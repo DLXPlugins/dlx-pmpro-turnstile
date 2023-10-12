@@ -3442,6 +3442,31 @@ div.components-toolbar > div + div.has-left-divider::before {
 /*!*****************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/resolve-url-loader/index.js!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[3]!./src/scss/admin.scss ***!
   \*****************************************************************************************************************************************************************************************************************/
+button.button-reset, button.button-reset:focus, button.button-reset:hover {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: inherit;
+  text-transform: unset;
+}
+button.button-reset.show-cursor {
+  cursor: pointer;
+}
+
+.button-reset button,
+.button-reset:focus button,
+.button-reset:hover button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: inherit;
+  text-transform: unset;
+}
+
 @keyframes dlx-pmpro-rotate {
   100% {
     transform: rotate(360deg);
@@ -3729,6 +3754,156 @@ html {
 }
 .dlxpmprocf-admin__notice.dlxpmprocf-admin__notice-type--warning svg path {
   fill: var(--dlxpmprocf-admin--color-notice--warning-alt);
+}
+
+/**
+ * License.
+ */
+/* Licenses Screen */
+.dlx-admin__license--wrapper .dlx-admin__text-control-license {
+  position: relative;
+}
+.dlx-admin__license--wrapper .dlx-admin__text-control-license label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+.dlx-admin__license--wrapper .dlx-admin__text-control-license input[type=text],
+.dlx-admin__license--wrapper .dlx-admin__text-control-license input[type=password] {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding: 0.6875rem 1rem;
+  line-height: 2;
+  min-height: 30px;
+  margin: 0;
+  outline-style: none;
+  box-sizing: border-box;
+}
+.dlx-admin__license--wrapper .dlx-admin__license--input-wrapper {
+  position: relative;
+}
+.dlx-admin__license--wrapper .dlx-admin__license--input-preview {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  top: calc(50% - 16px);
+  /* 50% height - padding/2 - bottom margin/2) */
+  right: 1.75rem;
+  line-height: 0;
+  font-size: 0;
+}
+.dlx-admin__license--wrapper .dlx-admin__license--input-preview input[type=checkbox] {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+}
+.dlx-admin__license--wrapper .dlx-admin__license--input-preview input[type=checkbox]:hover ~ label svg path {
+  fill: none;
+  color: currentColor;
+}
+.dlx-admin__license--wrapper .dlx-admin__license--input-preview label {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+.dlx-admin__license--wrapper .dlx-admin__license--input-preview label span.dlx-pmpro-turnstile--show-hide--label {
+  display: none;
+}
+.dlx-admin__license--wrapper .dlx-admin__license--input-preview label .dlx-pmpro-turnstile--show-hide--icon {
+  position: relative;
+}
+.dlx-admin__license--wrapper .dlx-admin__license--input-preview label .dlx-pmpro-turnstile--show-hide--icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.dlx-admin__license--wrapper .dlx-admin__license--input-preview label .dlx-pmpro-turnstile--show-hide--icon svg path {
+  fill: none;
+  color: currentColor;
+}
+
+/* License Table */
+.dlx-pmpro-turnstile-table {
+  box-sizing: border-box;
+  border: 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+.dlx-pmpro-turnstile-table tr {
+  border-bottom: 0.0625rem solid #DDD;
+}
+.dlx-pmpro-turnstile-table th {
+  font-weight: 500;
+  padding: 0.8125rem 1.125rem;
+  font-size: 1.3em;
+  text-align: left;
+}
+.dlx-pmpro-turnstile-table tbody tr:last-child {
+  border-bottom: 0;
+}
+.dlx-pmpro-turnstile-table td {
+  padding: 1.25rem 1.125rem;
+  text-align: left;
+}
+
+/* For license visibility */
+.dlx-admin__license--input-preview .svg-inline--fa {
+  color: currentColor;
+  width: 32px;
+  height: 32px;
+}
+
+#dlx-pmpro-turnstile-license-show-hide:hover ~ label svg path {
+  fill: currentColor;
+}
+
+.dlx-admin__license--input-wrapper:hover ~ label svg path {
+  fill: none;
+  color: currentColor;
+}
+
+.components-button.button-reset.has-icon {
+  color: gray;
+  min-width: 48px;
+}
+
+button.dlx-pmpro__btn-danger {
+  background: #fff;
+  color: #822700;
+  border-color: #822700;
+}
+button.dlx-pmpro__btn-danger:hover {
+  background: #ece6e6;
+  color: #822700;
+  border-color: #822700;
+}
+
+div.can-revoke {
+  justify-content: flex-end;
+}
+
+.dlx-admin__license--wrapper .dlx-pmpro__btn-danger {
+  text-align: right;
+}
+.dlx-admin__license--wrapper .dlx-admin__tabs--content-actions {
+  padding-top: 0;
 }
 
 /*# sourceMappingURL=dlx-pmpro-cloudflare-turnstile-admin.css.map*/

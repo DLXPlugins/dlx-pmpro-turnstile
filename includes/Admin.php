@@ -109,18 +109,11 @@ class Admin {
 			wp_send_json_error( $response );
 		}
 
-		if ( 'valid' === $response['license'] ) {
-			$license_helper->set_activated_status( true );
-			$response['license_valid']     = true;
-			$response['license_activated'] = true;
-		} else {
-			$license_helper->set_activated_status( false );
-			$response['license_valid']     = false;
-			$response['license_activated'] = false;
-		}
-		$response['licenseKey'] = $license_key;
-		$options['licenseData'] = get_transient( 'dlxpmprocf_core_license_check', array() );
-		wp_send_json_success( $response );
+		// Get latest options.
+		$options                = Options::get_options( true );
+		$options['licenseKey']  = $license_key;
+		$options['licenseData'] = get_site_transient( 'dlxpmprocf_core_license_check', array() );
+		wp_send_json_success( $options );
 	}
 
 	/**
@@ -169,7 +162,7 @@ class Admin {
 				)
 			);
 		}
-		$options                = Options::get_options();
+		$options                = Options::get_options( true );
 		$options['licenseData'] = get_site_transient( 'dlxpmprocf_core_license_check', array() );
 		wp_send_json_success( $options );
 	}
