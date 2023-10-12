@@ -242,7 +242,7 @@ const Interface = ( props ) => {
 					type="submit"
 					text={ saving ? saveTextLoading : saveText }
 					icon={ saving ? <FontAwesomeIcon icon={ Loader } style={ { color: 'currentColor' } } /> : false }
-					iconSize="18"
+					iconSize="1x"
 					iconPosition="right"
 					disabled={ saving || revokingLicense }
 					variant="primary"
@@ -393,7 +393,7 @@ const Interface = ( props ) => {
 										: __( 'Revoke License', 'dlx-pmpro-turnstile' )
 								}
 								icon={ revokingLicense ? <FontAwesomeIcon icon={ Loader } style={ { color: 'currentColor' } } /> : false }
-								iconSize="18"
+								iconSize="1x"
 								iconPosition="right"
 								disabled={ saving || revokingLicense }
 								onClick={ ( e ) => {

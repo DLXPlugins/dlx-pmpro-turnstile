@@ -11447,7 +11447,7 @@ var Interface = function Interface(props) {
           color: 'currentColor'
         }
       }) : false,
-      iconSize: "18",
+      iconSize: "1x",
       iconPosition: "right",
       disabled: saving || revokingLicense,
       variant: "primary"
@@ -11594,7 +11594,7 @@ var Interface = function Interface(props) {
         color: 'currentColor'
       }
     }) : false,
-    iconSize: "18",
+    iconSize: "1x",
     iconPosition: "right",
     disabled: saving || revokingLicense,
     onClick: function onClick(e) {

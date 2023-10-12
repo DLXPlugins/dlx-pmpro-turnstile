@@ -3587,6 +3587,12 @@ html {
 .dlx-pmpro-turnstile-admin-buttons button:last-child {
   margin-right: 0;
 }
+.dlx-pmpro-turnstile-admin-buttons button.is-primary {
+  background: #2271b1;
+}
+.dlx-pmpro-turnstile-admin-buttons button.is-primary:hover:not(:disabled) {
+  background: #135e96;
+}
 .dlx-pmpro-turnstile-admin-buttons button.is-saving svg, .dlx-pmpro-turnstile-admin-buttons button.is-resetting svg {
   animation: dlx-pmpro-rotate;
   animation-duration: 1.2s;
@@ -3710,17 +3716,17 @@ html {
   fill: var(--dlxpmprocf-admin--color-notice--error-alt);
 }
 .dlxpmprocf-admin__notice.dlxpmprocf-admin__notice-type--error.dlxpmprocf-admin__notice-appearance--inline .dlxpmprocf-admin__notice-message {
-  color: var(--dlxpmprocf-admin--color-notice--error-alt);
-}
-.dlxpmprocf-admin__notice.dlxpmprocf-admin__notice-type--error.dlxpmprocf-admin__notice-appearance--inline .dlxpmprocf-admin__notice-message {
-  font-size: 0.9em;
+  color: #FFF;
+  fill: #FFF;
 }
 .dlxpmprocf-admin__notice.dlxpmprocf-admin__notice-type--error.dlxpmprocf-admin__notice-appearance--inline svg {
   width: 16px;
   height: 16px;
+  margin-left: 15px;
+  margin-right: 8px;
 }
-.dlxpmprocf-admin__notice.dlxpmprocf-admin__notice-type--error.dlxpmprocf-admin__notice-appearance--inline svg path {
-  fill: var(--dlxpmprocf-admin--color-notice--error-alt);
+.dlxpmprocf-admin__notice.dlxpmprocf-admin__notice-type--error.dlxpmprocf-admin__notice-appearance--inline .components-notice__content {
+  padding: 8px 15px 8px 0;
 }
 .dlxpmprocf-admin__notice.dlxpmprocf-admin__notice-type--success {
   background-color: var(--dlxpmprocf-admin--color-notice--success);
@@ -3767,6 +3773,20 @@ html {
   font-size: 0.8125rem;
   font-weight: 500;
 }
+.dlx-admin__license--wrapper .dlx-admin__text-control-license label.components-base-control__label {
+  display: inline-block;
+}
+.dlx-admin__license--wrapper .dlx-admin__text-control-license.is-required label:after {
+  position: absolute;
+  display: inline-block;
+  vertical-align: middle;
+  content: "*";
+  top: -3px;
+  color: #b53b07;
+  font-size: 1.4em;
+  line-height: 1.3;
+  margin-left: 8px;
+}
 .dlx-admin__license--wrapper .dlx-admin__text-control-license input[type=text],
 .dlx-admin__license--wrapper .dlx-admin__text-control-license input[type=password] {
   display: flex;
@@ -3792,8 +3812,7 @@ html {
   position: absolute;
   width: 32px;
   height: 32px;
-  top: calc(50% - 16px);
-  /* 50% height - padding/2 - bottom margin/2) */
+  top: calc(0.1875rem + 27px + 0.34375rem);
   right: 1.75rem;
   line-height: 0;
   font-size: 0;
@@ -3904,6 +3923,16 @@ div.can-revoke {
 }
 .dlx-admin__license--wrapper .dlx-admin__tabs--content-actions {
   padding-top: 0;
+}
+
+.has-error input.components-text-control__input {
+  border: 1px solid var(--dlxpmprocf-admin--color-notice--error-alt);
+  background-color: var(--dlxpmprocf-admin--color-notice--error);
+}
+
+/* Toggle Styles */
+.components-form-toggle.is-checked .components-form-toggle__track {
+  background-color: #2271b1;
 }
 
 /*# sourceMappingURL=dlx-pmpro-cloudflare-turnstile-admin.css.map*/
