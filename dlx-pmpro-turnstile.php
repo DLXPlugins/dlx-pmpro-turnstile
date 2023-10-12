@@ -20,6 +20,7 @@ namespace DLXPlugins\PMProTurnstile;
 
 define( 'DLX_PMPRO_TURNSTILE_VERSION', '1.0.0' );
 define( 'DLX_PMPRO_TURNSTILE_FILE', __FILE__ );
+define( 'DLX_PMPRO_TURNSTILE_PRODUCT_ID', 36132 );
 
 // Support for site-level autoloading.
 if ( file_exists( __DIR__ . '/lib/autoload.php' ) ) {

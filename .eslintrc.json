@@ -6,7 +6,8 @@
 		"window": true,
 		"document": true,
 		"dlxPMProTurnstileAdmin": "readonly",
-		"dlxPMPRoTurnstile": "readonly"
+		"dlxPMPRoTurnstile": "readonly",
+		"dlxPMProTurnstileAdminLicense": "readonly"
 	},
 	"env": {
 		"browser": true,

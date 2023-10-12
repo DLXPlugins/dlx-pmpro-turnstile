@@ -13,9 +13,9 @@ import { useAsyncResource } from 'use-async-resource';
 import { AlertCircle } from 'lucide-react';
 
 // Local imports.
-import SendCommand from '../utils/SendCommand';
-import Notice from '../components/Notice';
-import SaveResetButtons from '../components/SaveResetButtons';
+import SendCommand from '../../utils/SendCommand';
+import Notice from '../../components/Notice';
+import SaveResetButtons from '../../components/SaveResetButtons';
 
 /**
  * Retrieve all levels and format into token format.
