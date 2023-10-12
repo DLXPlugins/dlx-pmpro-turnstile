@@ -11268,7 +11268,6 @@ var Interface = function Interface(props) {
   var hasErrors = function hasErrors() {
     return Object.keys(errors).length > 0;
   };
-  console.log(licenseData);
   var _useForm = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_7__.useForm)({
       defaultValues: {
         enabled: data.enabled,
@@ -11321,7 +11320,7 @@ var Interface = function Interface(props) {
           keepErrors: false,
           keepDirty: false
         });
-        setLicenseData(ajaxData);
+        setLicenseData(ajaxData.licenseData);
         setIsSaved(true);
 
         // Reset count.

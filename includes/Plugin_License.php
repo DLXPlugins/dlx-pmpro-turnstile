@@ -154,7 +154,6 @@ class Plugin_License {
 						'licenseValid'  => $response['license'] ?? '', // Response for $license is a valid or invalid string.
 						'priceId'       => $response['price_id'] ?? '',
 						'licenseActive' => $response['license'] ?? false,
-						'licenseData'   => $response,
 
 					),
 					$options

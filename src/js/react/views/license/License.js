@@ -62,8 +62,6 @@ const Interface = ( props ) => {
 		return Object.keys( errors ).length > 0;
 	};
 
-	console.log( licenseData );
-
 	const {
 		control,
 		handleSubmit,
@@ -119,7 +117,7 @@ const Interface = ( props ) => {
 						keepErrors: false,
 						keepDirty: false,
 					} );
-					setLicenseData( ajaxData );
+					setLicenseData( ajaxData.licenseData );
 					setIsSaved( true );
 
 					// Reset count.

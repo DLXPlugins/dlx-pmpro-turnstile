@@ -118,8 +118,6 @@ class Options {
 			'widgetSize'                 => 'normal',
 			'excludedMembershipLevels'   => array(),
 			'excludedCheckoutLevels'     => array(),
-			'licenseActivated'           => false,
-			'licenseValid'               => '',
 			'licenseKey'                 => '',
 			'priceId' => '1',
 		);
