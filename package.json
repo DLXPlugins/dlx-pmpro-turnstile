@@ -67,6 +67,7 @@
 		"webpack-remove-empty-scripts": "^0.7.3"
 	},
 	"dependencies": {
+		"@fancyapps/ui": "^5.0.24",
 		"@fortawesome/pro-duotone-svg-icons": "^6.4.2"
 	}
 }

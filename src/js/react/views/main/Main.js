@@ -6,13 +6,15 @@ import {
 	CheckboxControl,
 	BaseControl,
 	SelectControl,
+	Button,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import { useAsyncResource } from 'use-async-resource';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation as TriangleExclamation, faCircleCheck as CircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { faTriangleExclamation as TriangleExclamation, faCircleCheck as CircleCheck, faEye } from '@fortawesome/free-solid-svg-icons';
 import { faCircleExclamation as CircularExclamation } from '@fortawesome/free-solid-svg-icons/faCircleExclamation';
+import { Fancybox } from '@fancyapps/ui';
 
 // Local imports.
 import SendCommand from '../../utils/SendCommand';
@@ -125,6 +127,51 @@ const Interface = ( props ) => {
 		);
 	};
 
+	const getPreviewButton = () => {
+		const siteKey = getValues( 'siteKey' );
+		const secretKey = getValues( 'secretKey' );
+
+		// If both site key and secret key have content, show the preview button.
+		if ( siteKey && secretKey ) {
+			return (
+				<Button
+					label={ __( 'Preview Turnstile', 'dlx-pmpro-turnstile' ) }
+					className="dlx-admin__button"
+					onClick={ () => {
+						// Build a URL from admin-ajax.
+						const adminAjaxUrl = dlxPMProTurnstileAdmin.ajaxurl; // Can't use global `ajaxurl` here because `ajaxurl` is a relative path.
+
+						// Add query params to adminAjaxUrl.
+						const url = new URL( adminAjaxUrl );
+						url.searchParams.set( 'action', 'dlx_pmpro_turnstile_admin_preview' );
+						url.searchParams.set( 'nonce', dlxPMProTurnstileAdmin.previewNonce );
+						url.searchParams.set( 'siteKey', formValues.siteKey );
+						url.searchParams.set( 'secretKey', formValues.secretKey );
+						url.searchParams.set( 'language', formValues.language );
+						url.searchParams.set( 'widgetAppearance', formValues.widgetAppearance );
+						url.searchParams.set( 'widgetTheme', formValues.widgetTheme );
+						url.searchParams.set( 'widgetSize', formValues.widgetSize );
+
+						// Let's get the URL.
+						const iframeAjaxUrl = url.toString();
+
+						// Launch iframe in fancybox.
+						Fancybox.show( [ {
+							src: iframeAjaxUrl,
+							type: 'iframe',
+							autoStart: false,
+							id: 'dlx-pmpro-turnstile-preview',
+						} ] );
+					} }
+					icon={ <FontAwesomeIcon icon={ faEye } style={ { color: 'currentColor' } } /> }
+
+				>
+					{ __( 'Preview', 'dlx-pmpro-turnstile' ) }
+				</Button>
+			);
+		}
+	};
+
 	return (
 		<>
 			<div className="dlx-pmpro-turnstile-admin-content-heading">
@@ -196,7 +243,7 @@ const Interface = ( props ) => {
 															status="error"
 															politeness="assertive"
 															inline={ true }
-															icon={ () => <AlertCircle style={ { fill: 'none', color: 'currentColor' } } /> }
+															icon={ () => <FontAwesomeIcon icon={ CircularExclamation } style={ { color: 'currentColor' } } /> }
 														/>
 													) }
 												</>
@@ -228,13 +275,14 @@ const Interface = ( props ) => {
 															status="error"
 															politeness="assertive"
 															inline={ true }
-															icon={ () => <AlertCircle style={ { fill: 'none', color: 'currentColor' } } /> }
+															icon={ () => <FontAwesomeIcon icon={ CircularExclamation } style={ { color: 'currentColor' } } /> }
 														/>
 													) }
 												</>
 											) }
 										/>
 									</div>
+									{ getPreviewButton() }
 								</td>
 							</tr>
 							<tr>

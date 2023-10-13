@@ -24,6 +24,7 @@ module.exports = ( env ) => {
 				'dlx-pmpro-cloudflare-turnstile-admin': [ './src/js/react/views/main/index.js', './src/scss/admin.scss' ],
 				'dlx-pmpro-cloudflare-turnstile-admin-license': [ './src/js/react/views/license/index.js' ],
 				'dlx-pmpro-cloudflare-turnstile-admin-help': [ './src/js/react/views/help/index.js' ],
+				'dlx-pmpro-cloudflare-turnstile-preview-modal': [ './src/js/preview/index.js', './src/scss/modal.scss' ],
 			},
 			module: {
 				rules: [

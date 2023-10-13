@@ -45,6 +45,85 @@ class Admin {
 
 		// For initializing settings links on the plugins screen.
 		add_action( 'admin_init', array( $this, 'init_settings_links' ) );
+
+		// For the admin preview.
+		add_action( 'wp_ajax_dlx_pmpro_turnstile_admin_preview', array( $this, 'ajax_admin_preview' ) );
+
+		// For admin preview submit action.
+		add_action( 'wp_ajax_dlx_pmpro_turnstile_admin_preview_validate', array( $this, 'ajax_admin_preview_validate' ) );
+	}
+
+	/**
+	 * Validate a form submitted in the preview modal.
+	 */
+	public function ajax_admin_preview_validate() {
+		// Do permissions check.
+		$nonce = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
+		if ( ! \wp_verify_nonce( $nonce, 'dlx-pmpro-turnstile-admin-preview-iframe') || ! current_user_can( 'manage_options' ) ) {
+			\wp_send_json_error( array() );
+		}
+
+		// Get secret key.
+		$secret_key = filter_input( INPUT_GET, 'secretKey', FILTER_DEFAULT );
+
+		// Get token.
+		$token = filter_input( INPUT_GET, 'turnstyleToken', FILTER_DEFAULT );
+
+		$can_proceed = false;
+
+		// Make sure token is valid.
+		if ( $token ) {
+
+			$cloudflare_endpoint_api = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+
+			// Build data envelope.
+			$data = array(
+				'secret'   => sanitize_text_field( $secret_key ),
+				'response' => sanitize_text_field( $token ),
+			);
+
+			$args = array(
+				'body'      => $data,
+				'method'    => 'POST',
+				'sslverify' => true,
+			);
+
+			$response = wp_remote_post( esc_url( $cloudflare_endpoint_api ), $args );
+
+			// If error, show response.
+			if ( is_wp_error( $response ) ) {
+				$can_proceed = false;
+			}
+
+			// Get body.
+			$body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+			$is_success = $body['success'] ?? false;
+			// If not a success, error.
+			if ( ! $is_success ) {
+				$can_proceed = false;
+			} else {
+				$can_proceed = true;
+			}
+
+			// Success!
+			if ( $can_proceed ) {
+				\wp_send_json_success( array() );
+			}
+		}
+		\wp_send_json_error( array() );
+	}
+
+	/**
+	 * Let's get the preview template.
+	 */
+	public function ajax_admin_preview() {
+		// We're getting the template.
+		$template_path = Functions::get_plugin_dir( 'templates/admin-preview.php' );
+		if ( \file_exists( $template_path ) ) {
+			include $template_path;
+		}
+		exit;
 	}
 
 	/**
@@ -346,6 +425,8 @@ class Admin {
 					'getNonce'   => wp_create_nonce( 'dlx-pmpro-turnstile-admin-get-options' ),
 					'saveNonce'  => wp_create_nonce( 'dlx-pmpro-turnstile-admin-save-options' ),
 					'resetNonce' => wp_create_nonce( 'dlx-pmpro-turnstile-admin-reset-options' ),
+					'previewNonce' => wp_create_nonce( 'dlx-pmpro-turnstile-admin-preview' ),
+					'ajaxurl'	=> admin_url( 'admin-ajax.php' ),
 					'levels'     => $levels,
 				)
 			);
