@@ -28,7 +28,16 @@ class Turnstile {
 		$options = Options::get_options();
 		// Check if Cloudflare Turnstile is even enabled.
 		if ( ! (bool) $options['enabled'] ) {
-			return false;
+			// If we're in the admin, bail.
+			if ( is_admin() ) {
+				return;
+			}
+
+			// Check for `enable_turnstile` query var. If it's not set, we bail. We check for permissions later.
+			$enable_turnstile = filter_input( INPUT_GET, 'enable_turnstile', FILTER_VALIDATE_BOOLEAN );
+			if ( ! $enable_turnstile ) {
+				return;
+			}
 		}
 
 		// Add Turnstile before the checkout button on checkout pages.

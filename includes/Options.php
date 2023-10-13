@@ -119,7 +119,9 @@ class Options {
 			'excludedMembershipLevels'   => array(),
 			'excludedCheckoutLevels'     => array(),
 			'licenseKey'                 => '',
-			'priceId' => '1',
+			'priceId'                    => '1',
+			'enableMenuHelper'           => true,
+			'enableLicenseAlerts'        => true,
 		);
 		return $defaults;
 	}
