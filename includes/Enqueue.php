@@ -16,20 +16,20 @@ class Enqueue {
 	 * Class runner.
 	 */
 	public function run() {
-		add_action( 'pmpro_checkout_before_submit_button', array( $this, 'enqueue_cloudflare_script' ) );
+		add_action( 'login_head', array( $this, 'print_login_styles' ) );
 	}
 
 	/**
-	 * Enqueue the Cloudflare Turnstile script in the footer.
+	 * Print login styles.
 	 */
-	public function enqueue_cloudflare_script() {
-		// Get current page for Paid Memberships Pro.
-		global $pmpro_pages;
-		$current_page = get_queried_object_id();
-
-		// If we can't show Turnstile, bail.
-		if ( ! Functions::can_show_turnstile() ) {
-			return;
+	public function print_login_styles() {
+		?>
+		<style>
+		#dlx-pmpro-turnstile iframe {
+			width: 100% !important;
+			padding-bottom: 10px;
 		}
+		</style>
+		<?php
 	}
 }
