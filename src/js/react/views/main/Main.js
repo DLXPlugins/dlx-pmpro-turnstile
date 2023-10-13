@@ -88,6 +88,8 @@ const Interface = ( props ) => {
 			excludedCheckoutLevels: data.excludedCheckoutLevels ?? [],
 			saveNonce: dlxPMProTurnstileAdmin.saveNonce,
 			resetNonce: dlxPMProTurnstileAdmin.resetNonce,
+			enableMenuHelper: data.enableMenuHelper,
+			enableLicenseAlerts: data.enableLicenseAlerts,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -97,6 +99,10 @@ const Interface = ( props ) => {
 
 	// Retrieve a prompt based on the license status.
 	const getPrompt = () => {
+		// Check to see if the license nag is disabled.
+		if ( 'valid' === licenseValid && ! getValues( 'enableLicenseAlerts' ) ) {
+			return null;
+		}
 		if ( 'valid' === licenseValid ) {
 			return (
 				<Notice
@@ -547,6 +553,56 @@ const Interface = ( props ) => {
 											</div>
 										</>
 									) }
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									{ __( 'Advanced', 'dlx-pmpro-turnstile' ) }
+								</th>
+								<td>
+									<div className="dlx-admin__row">
+										<Controller
+											name="enableMenuHelper"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __( 'Enable Admin Bar Shortcuts', 'dlx-pmpro-turnstile' ) }
+													className="dlx-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Allow a shortcut in the admin bar menu for accessing Turnstile settings.',
+														'dlx-pmpro-turnstile'
+													) }
+												/>
+											) }
+										/>
+									</div>
+									{ 'valid' === licenseValid && (
+										<div className="dlx-admin__row">
+											<Controller
+												name="enableLicenseAlerts"
+												control={ control }
+												render={ ( { field: { onChange, value } } ) => (
+													<ToggleControl
+														label={ __( 'Disable License Status', 'dlx-pmpro-turnstile' ) }
+														className="dlx-admin__toggle-control"
+														checked={ value }
+														onChange={ ( boolValue ) => {
+															onChange( boolValue );
+														} }
+														help={ __(
+															'Disable the license status update notification on this screen.',
+															'dlx-pmpro-turnstile'
+														) }
+													/>
+												) }
+											/>
+										</div>
+									) }
+
 								</td>
 							</tr>
 						</tbody>
