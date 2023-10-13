@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import {
 	ToggleControl,
 	TextControl,
@@ -10,7 +10,9 @@ import {
 import { __ } from '@wordpress/i18n';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import { useAsyncResource } from 'use-async-resource';
-import { AlertCircle } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTriangleExclamation as TriangleExclamation, faCircleCheck as CircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCircleExclamation as CircularExclamation } from '@fortawesome/free-solid-svg-icons/faCircleExclamation';
 
 // Local imports.
 import SendCommand from '../../utils/SendCommand';
@@ -59,6 +61,8 @@ const Interface = ( props ) => {
 	const response = defaults();
 	const { data } = response.data;
 
+	const [ licenseValid ] = useState( data.licenseValid );
+
 	const {
 		control,
 		handleSubmit,
@@ -91,15 +95,42 @@ const Interface = ( props ) => {
 		control,
 	} );
 
+	// Retrieve a prompt based on the license status.
+	const getPrompt = () => {
+		if ( 'valid' === licenseValid ) {
+			return (
+				<Notice
+					message={ __( 'Thank you for supporting this plugin. Your license key is active and you are receiving updates and support.', 'dlx-pmpro-turnstile' ) }
+					status="success"
+					politeness="assertive"
+					inline={ false }
+					icon={ () => <FontAwesomeIcon icon={ CircleCheck } style={ { color: 'currentColor' } } /> }
+				/>
+			);
+		}
+		return (
+			<Notice
+				message={ __( 'Your license key is not active. Please activate your license key to receive updates and support.', 'dlx-pmpro-turnstile' ) }
+				status="warning"
+				politeness="assertive"
+				inline={ false }
+				icon={ () => <FontAwesomeIcon icon={ TriangleExclamation } style={ { color: 'currentColor' } } /> }
+			/>
+		);
+	};
+
 	return (
 		<>
 			<div className="dlx-pmpro-turnstile-admin-content-heading">
 				<h1><span className="dlx-pmpro-turnstile-content-heading-text">{ __( 'Turnstile Settings for Paid Membership Pro', 'dlx-pmpro-turnstile' ) }</span></h1>
 				<p className="description">
 					{
-						__( 'Configure the settings for the Cloudflare Turnstile integration with Paid Membership Pro. If you need help, please use the help tab above.', 'dlx-pmpro-turnstile' )
+						__( 'Configure the settings for the Cloudflare Turnstile integration with Paid Membership Pro.', 'dlx-pmpro-turnstile' )
 					}
 				</p>
+				{
+					getPrompt()
+				}
 			</div>
 			{ /* eslint-disable-next-line no-unused-vars */ }
 			<form onSubmit={ handleSubmit( ( formData ) => { } ) }>

@@ -3474,6 +3474,7 @@ button.button-reset.show-cursor {
 }
 /* Make interface full-width/full-height */
 #wpcontent {
+  position: relative;
   padding-left: 0 !important;
   padding-right: 0 !important;
   position: relative;
@@ -3486,6 +3487,15 @@ button.button-reset.show-cursor {
 #wpbody-content {
   padding: 0;
   margin: 0;
+}
+
+#screen-meta-links {
+  position: absolute;
+  float: unset;
+  margin: 0;
+  top: 20px;
+  right: 15px;
+  z-index: 1000;
 }
 
 #wpfooter {
@@ -3933,6 +3943,194 @@ div.can-revoke {
 /* Toggle Styles */
 .components-form-toggle.is-checked .components-form-toggle__track {
   background-color: #2271b1;
+}
+
+/* Admin Buttons */
+.dlx-admin-component-row-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dlx-admin-component-row-button.no-flex {
+  display: block;
+}
+.dlx-admin-component-row-button.dlx-admin-buttons-flex-right {
+  justify-content: flex-end;
+}
+.dlx-admin-component-row-button svg.lucide path {
+  fill: none !important;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary,
+.dlx-admin-component-row-button button {
+  background: #fff;
+  color: #017e01;
+  border-style: solid;
+  border-color: #017e01;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.4s ease-in-out;
+  border-width: 1px;
+  margin-right: 12px;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary:last-child,
+.dlx-admin-component-row-button button:last-child {
+  margin-right: 0;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary svg,
+.dlx-admin-component-row-button button svg {
+  margin-right: 8px;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary:hover,
+.dlx-admin-component-row-button button:hover {
+  border-radius: 5px;
+  background: #e9ece6;
+  color: #005200;
+  border-color: #006400;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.has-error,
+.dlx-admin-component-row-button button.has-error {
+  border: 1px solid #bc2b2c;
+  box-shadow: none !important; /* override core style */
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.has-error:hover,
+.dlx-admin-component-row-button button.has-error:hover {
+  cursor: not-allowed;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn-white,
+.dlx-admin-component-row-button button.dlx__btn-white {
+  background: #fff;
+  color: #333;
+  border-color: #111;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn-white:hover,
+.dlx-admin-component-row-button button.dlx__btn-white:hover {
+  background: #e6e6e6;
+  color: #111;
+  border-color: #000;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn-secondary,
+.dlx-admin-component-row-button button.dlx__btn-secondary {
+  background: #FFF;
+  color: #333;
+  border-color: #111;
+  padding: 15px 20px;
+  display: inline-block;
+  height: unset;
+  max-height: unset;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn-secondary:hover,
+.dlx-admin-component-row-button button.dlx__btn-secondary:hover {
+  background: #ddd;
+  color: #000;
+  border-color: #333;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn-link,
+.dlx-admin-component-row-button button.dlx__btn-link {
+  all: unset;
+  cursor: pointer;
+  color: #9949cf;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn-danger,
+.dlx-admin-component-row-button button.dlx__btn-danger {
+  background: #fff;
+  color: #822700;
+  border-color: #822700;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn-danger:hover,
+.dlx-admin-component-row-button button.dlx__btn-danger:hover {
+  background: #ece6e6;
+  color: #822700;
+  border-color: #822700;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.sce__btn-action,
+.dlx-admin-component-row-button button.sce__btn-action {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  color: #9949cf;
+  border-color: #9949cf;
+  font-weight: 600;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.sce__btn-action:hover,
+.dlx-admin-component-row-button button.sce__btn-action:hover {
+  background: rgb(248, 247, 254);
+  color: #8019c4;
+  border-color: #6f6f6f;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.sce__btn-action:hover svg path,
+.dlx-admin-component-row-button button.sce__btn-action:hover svg path {
+  fill: #8019c4;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.sce__btn-action svg,
+.dlx-admin-component-row-button button.sce__btn-action svg {
+  display: inline-block;
+  margin-right: 8px;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.sce__btn-action svg path,
+.dlx-admin-component-row-button button.sce__btn-action svg path {
+  fill: #9949cf;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn--icon-right.is-saving,
+.dlx-admin-component-row-button button.dlx__btn--icon-right.is-saving {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn--icon-right.is-saving svg,
+.dlx-admin-component-row-button button.dlx__btn--icon-right.is-saving svg {
+  width: 24px;
+  height: 24px;
+  margin-left: 8px;
+  animation: dlx-rotate 1s linear infinite;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn--icon-right.is-saving svg path,
+.dlx-admin-component-row-button button.dlx__btn--icon-right.is-saving svg path {
+  fill: currentColor;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn--icon-right.is-saved,
+.dlx-admin-component-row-button button.dlx__btn--icon-right.is-saved {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn--icon-right.is-saved svg,
+.dlx-admin-component-row-button button.dlx__btn--icon-right.is-saved svg {
+  width: 24px;
+  height: 24px;
+  margin-left: 14px;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn--icon-right.is-saved svg path,
+.dlx-admin-component-row-button button.dlx__btn--icon-right.is-saved svg path {
+  fill: #017e01;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn--icon-right.is-resetting,
+.dlx-admin-component-row-button button.dlx__btn--icon-right.is-resetting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn--icon-right.is-resetting svg,
+.dlx-admin-component-row-button button.dlx__btn--icon-right.is-resetting svg {
+  width: 24px;
+  height: 24px;
+  animation: dlx-rotate 1s linear infinite;
+}
+.dlx-admin-component-row-button a.dlx__btn-secondary.dlx__btn--icon-right.is-resetting svg path,
+.dlx-admin-component-row-button button.dlx__btn--icon-right.is-resetting svg path {
+  fill: #822700;
+}
+
+.dlx-info-text {
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.dlx-admin-panel-area > h2 ~ p {
+  font-size: 16px;
+  line-height: 1.3;
 }
 
 /*# sourceMappingURL=dlx-pmpro-cloudflare-turnstile-admin.css.map*/

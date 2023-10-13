@@ -111,7 +111,7 @@ class Plugin_License {
 		$api_params = array(
 			'edd_action' => $action,
 			'license'    => $this->license,
-			'item_name'  => rawurlencode( $this->plugin_name ),
+			'item_id'    => DLX_PMPRO_TURNSTILE_PRODUCT_ID,
 			'url'        => home_url(),
 		);
 		// Call the custom API.
@@ -148,7 +148,7 @@ class Plugin_License {
 					$options
 				);
 			} else {
-				$options      = wp_parse_args(
+				$options = wp_parse_args(
 					array(
 						'licenseKey'    => $response['license_key'] ?? '',
 						'licenseValid'  => $response['license'] ?? '', // Response for $license is a valid or invalid string.

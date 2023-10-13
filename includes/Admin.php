@@ -40,10 +40,40 @@ class Admin {
 		// For saving a license.
 		add_action( 'wp_ajax_dlx_pmpro_turnstile_save_license', array( $this, 'ajax_save_license' ) );
 
-		// For saving a license.
-
 		// For initializing EDD license.
 		add_action( 'admin_init', array( $this, 'init_license_system' ) );
+
+		// For initializing settings links on the plugins screen.
+		add_action( 'admin_init', array( $this, 'init_settings_links' ) );
+	}
+
+	/**
+	 * Initialize the setting links for the plugin page.
+	 */
+	public function init_settings_links() {
+		$prefix = Functions::is_multisite() ? 'network_admin_' : '';
+		add_action( $prefix . 'plugin_action_links_' . plugin_basename( DLX_PMPRO_TURNSTILE_FILE ), array( $this, 'plugin_settings_link' ) );
+	}
+
+	/**
+	 * Adds plugin settings page link to plugin links in WordPress Dashboard Plugins Page
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $settings Uses $prefix . "plugin_action_links_$plugin_file" action.
+	 * @return array Array of settings
+	 */
+	public function plugin_settings_link( $settings ) {
+		$setting_links = array(
+			'settings' => sprintf( '<a href="%s">%s</a>', esc_url( Functions::get_settings_url() ), esc_html__( 'Settings', 'dlx-pmpro-turnstile' ) ),
+			'docs'     => sprintf( '<a href="%s">%s</a>', esc_url( 'https://docs.dlxplugins.com/' ), esc_html__( 'Docs', 'dlx-pmpro-turnstile' ) ),
+			'site'     => sprintf( '<a href="%s" style="color: #f60098;">%s</a>', esc_url( 'https://dlxplugins.com/plugins/ajaxify-comments/' ), esc_html__( 'Visit Site', 'dlx-pmpro-turnstile' ) ),
+		);
+		if ( ! is_array( $settings ) ) {
+			return $setting_links;
+		} else {
+			return array_merge( $setting_links, $settings );
+		}
 	}
 
 	/**
@@ -336,6 +366,14 @@ class Admin {
 					'revokeNonce' => wp_create_nonce( 'dlx-pmpro-turnstile-admin-license-revoke' ),
 				)
 			);
+		} elseif ( 'help' === $current_tab ) {
+			wp_enqueue_script(
+				'dlx-pmpro-turnstile-admin-help',
+				Functions::get_plugin_url( 'dist/dlx-pmpro-cloudflare-turnstile-admin-help.js' ),
+				array(),
+				Functions::get_plugin_version(),
+				true
+			);
 		}
 
 		// Enqueue admin styles.
@@ -371,12 +409,17 @@ class Admin {
 			if ( 'license' === $current_tab ) {
 				$license_tab_class[] = 'nav-tab-active';
 			}
+			$help_tab_class = array( 'nav-tab' );
+			if ( 'help' === $current_tab ) {
+				$help_tab_class[] = 'nav-tab-active';
+			}
 			?>
 			<main class="dlx-pmpro-turnstile-admin-body-wrapper">
 				<div class="has-admin-container-body">
 					<nav class="nav-tab-wrapper">
 						<a  class="<?php echo esc_attr( implode( ' ', $settings_tab_class ) ); ?>" href="<?php echo esc_url( Functions::get_settings_url() ); ?>"><?php esc_html_e( 'Settings', 'dlx-pmpro-turnstile' ); ?></a>
 						<a  class="<?php echo esc_attr( implode( ' ', $license_tab_class ) ); ?>" href="<?php echo esc_url( Functions::get_settings_url( 'license' ) ); ?>"><?php esc_html_e( 'License', 'dlx-pmpro-turnstile' ); ?></a>
+						<a  class="<?php echo esc_attr( implode( ' ', $help_tab_class ) ); ?>" href="<?php echo esc_url( Functions::get_settings_url( 'help' ) ); ?>"><?php esc_html_e( 'Help', 'dlx-pmpro-turnstile' ); ?></a>
 					</nav>
 				</div>
 				<div class="dlx-pmpro-turnstile-body__content">
@@ -388,6 +431,10 @@ class Admin {
 					} elseif ( 'license' === $current_tab ) {
 						?>
 							<div id="dlx-pmpro-turnstile-license"></div>
+						<?php
+					} elseif ( 'help' === $current_tab ) {
+						?>
+							<div id="dlx-pmpro-turnstile-help"></div>
 						<?php
 					}
 					?>
