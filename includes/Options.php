@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Admin class.
  *
@@ -15,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class that updates and stores the options.
  */
 class Options {
+
 
 	/**
 	 * Array holding the options.
@@ -102,20 +104,22 @@ class Options {
 	public static function get_defaults() {
 
 		$defaults = array(
-			'enabled'                  => false,
-			'enabledPMProLoginForm'    => true,
-			'enabledPMProPasswordForm' => true,
-			'enabledWPLoginForm'       => true,
-			'enabledCheckoutForm'      => false,
+			'enabled'                    => false,
+			'enabledPMProLoginForm'      => true,
+			'enabledPMProPasswordForm'   => true,
+			'enabledWPLoginForm'         => true,
+			'enabledCheckoutForm'        => false,
 			'enabledWPPasswordResetForm' => true,
-			'siteKey'                  => '',
-			'secretKey'                => '',
-			'language'                 => 'en',
-			'widgetAppearance'         => 'always',
-			'widgettheme' => 'auto',
-			'widgetSize'               => 'normal',
-			'excludedMembershipLevels' => array(),
-			'excludedCheckoutLevels'   => array(),
+			'siteKey'                    => '',
+			'secretKey'                  => '',
+			'language'                   => 'en',
+			'widgetAppearance'           => 'always',
+			'widgettheme'                => 'auto',
+			'widgetSize'                 => 'normal',
+			'excludedMembershipLevels'   => array(),
+			'excludedCheckoutLevels'     => array(),
+			'licenseKey'                 => '',
+			'priceId' => '1',
 		);
 		return $defaults;
 	}
