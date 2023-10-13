@@ -77,6 +77,10 @@ class PMProTurnstile {
 		$admin = new Admin();
 		$admin->run();
 
+		// Set up admin bar.
+		$admin_bar = new Admin_Bar();
+		$admin_bar->run();
+
 		/**
 		 * When Turnstile can be extended.
 		 *

@@ -63,6 +63,8 @@ class Functions {
 
 	/**
 	 * Determines if Cloudflare turnstile is enabled/can be shown.
+	 *
+	 * Don't run this too early as it relies on PMPro's global $pmpro_pages and the post id.
 	 */
 	public static function can_show_turnstile() {
 		global $pmpro_pages;
@@ -83,6 +85,31 @@ class Functions {
 		// See if checkout page and current page match. If so, we're on a checkout page.
 		if ( $current_page === $checkout_page_id ) {
 			$is_checkout_page = true;
+		}
+
+		// If on the checkout page, check to see if turnstile is enabled via the admin bar menu (capability, manage_options).
+		if ( $is_checkout_page ) {
+			// Check to see if query var is set.
+			$enable_turnstile = filter_input( INPUT_GET, 'enable_turnstile', FILTER_VALIDATE_BOOLEAN );
+			$nonce = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
+			$action_enable = 'dlx-pmpro-turnstile-enable';
+			$action_disable = 'dlx-pmpro-turnstile-disable';
+
+			if ( null !== $enable_turnstile ) {
+				if ( $enable_turnstile ) {
+					$is_nonce_valid = \wp_verify_nonce( $nonce, $action_enable );
+					if ( false !== $is_nonce_valid && current_user_can( 'manage_options' ) ) {
+						// Enable turnstile.
+						return true;
+					}
+				} else {
+					$is_nonce_valid = \wp_verify_nonce( $nonce, $action_disable );
+					if ( false !== $is_nonce_valid && current_user_can( 'manage_options' ) ) {
+						// Disable turnstile.
+						return false;
+					}
+				}
+			}
 		}
 
 		// Let's get the GET action to see if we're on a password reset page.
