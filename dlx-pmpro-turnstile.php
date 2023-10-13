@@ -122,3 +122,80 @@ add_action(
 		$pmpro_turnstile->login_init();
 	}
 );
+
+/* Setup plugin activation and redirection */
+register_activation_hook( __FILE__, __NAMESPACE__ . '\on_plugin_activation' );
+add_action( 'admin_init', __NAMESPACE__ . '\activate_redirect' );
+/**
+ * Determine if a user can be redirected or not.
+ *
+ * @return true if the user can be redirected. false if not.
+ */
+function can_redirect_on_activation() {
+	/**
+	 * Filter whether to redirect on plugin activation.
+	 *
+	 * @param bool $can_redirect Whether to redirect on plugin activation. Pass `false` to prevent redirect.
+	 */
+	$can_redirect = apply_filters( 'dlxplugins/pmproturnstile/can_redirect', true );
+	if ( false === $can_redirect ) {
+		return false;
+	}
+
+	// If plugin is activated in network admin options, skip redirect.
+	if ( is_network_admin() ) {
+		return false;
+	}
+
+	// Skip redirect if WP_DEBUG is enabled.
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		return false;
+	}
+
+	// Check for dev mode.
+	if ( function_exists( 'wp_get_development_mode' ) ) {
+		if ( ! empty( wp_get_development_mode() ) ) {
+			return false;
+		}
+	}
+
+	// Determine if multi-activation is enabled.
+	$maybe_multi = filter_input( INPUT_GET, 'activate-multi', FILTER_VALIDATE_BOOLEAN );
+	if ( $maybe_multi ) {
+		return false;
+	}
+
+	// See if cloudflare keys are already set.
+	$options = Options::get_options();
+	$site_key = $options['siteKey'];
+	$secret_key = $options['secretKey'];
+	if ( ! empty( $site_key ) && ! empty( $secret_key ) ) {
+		return false;
+	}
+
+	// All is well. Can redirect.
+	return true;
+}
+
+/**
+ * Callback when the plugin is activated.
+ */
+function on_plugin_activation() {
+	if ( can_redirect_on_activation() ) {
+		// Add option for whether to redirect.
+		add_option( 'dlx_pmpro_turnstile_redirect', sanitize_text_field( __FILE__ ) );
+	}
+}
+
+/**
+ * Redirect in the admin upon plugin activation.
+ */
+function activate_redirect() {
+	if ( can_redirect_on_activation() && is_admin() ) {
+		if ( __FILE__ === get_option( 'dlx_pmpro_turnstile_redirect' ) ) {
+			delete_option( 'dlx_pmpro_turnstile_redirect' );
+			wp_safe_redirect( esc_url_raw( add_query_arg( array( 'first_time_install' => true ), Functions::get_settings_url() ) ) );
+			exit;
+		}
+	}
+}
