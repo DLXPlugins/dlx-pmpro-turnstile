@@ -3597,11 +3597,16 @@ html {
 .dlx-pmpro-turnstile-admin-buttons button:last-child {
   margin-right: 0;
 }
-.dlx-pmpro-turnstile-admin-buttons button.is-primary {
-  background: #2271b1;
+.dlx-pmpro-turnstile-admin-buttons button:disabled {
+  opacity: 0.5;
 }
-.dlx-pmpro-turnstile-admin-buttons button.is-primary:hover:not(:disabled) {
-  background: #135e96;
+.dlx-pmpro-turnstile-admin-buttons button.is-primary, .dlx-pmpro-turnstile-admin-buttons button:disabled {
+  background: #2271b1 !important; /* override core style */
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.dlx-pmpro-turnstile-admin-buttons button.is-primary:hover:not(:disabled), .dlx-pmpro-turnstile-admin-buttons button:disabled:hover:not(:disabled) {
+  background: #135e96 !important; /* override core style */
 }
 .dlx-pmpro-turnstile-admin-buttons button.is-saving svg, .dlx-pmpro-turnstile-admin-buttons button.is-resetting svg {
   animation: dlx-pmpro-rotate;

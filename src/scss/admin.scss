@@ -142,11 +142,17 @@ html {
 	&:last-child {
 		margin-right: 0;
 	}
-	&.is-primary {
-		background: #2271b1;
+	&:disabled {
+		opacity: 0.5;
+	}
+	&.is-primary,
+	&:disabled {
+		background: #2271b1 !important; /* override core style */
+		padding-left: 15px;
+		padding-right: 15px;
 
 		&:hover:not(:disabled)  {
-			background: #135e96;
+			background: #135e96 !important; /* override core style */
 		}
 	}
 	&.is-saving,
