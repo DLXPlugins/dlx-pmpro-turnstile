@@ -8,7 +8,8 @@
 		"dlxPMProTurnstileAdmin": "readonly",
 		"dlxPMPRoTurnstile": "readonly",
 		"dlxPMProTurnstileAdminLicense": "readonly",
-		"dlxCF7": "readonly"
+		"dlxCF": "readonly",
+		"turnstile": "readonly"
 	},
 	"env": {
 		"browser": true,

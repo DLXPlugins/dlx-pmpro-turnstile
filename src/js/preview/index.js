@@ -7,9 +7,23 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	form.addEventListener( 'submit', ( e ) => {
 		e.preventDefault();
 
+		// Get the submit button.
+		const submitButton = form.querySelector( 'input[type="submit"]' );
+
+		// Disable the submit button.
+		submitButton.setAttribute( 'disabled', 'disabled' );
+
+		// Get the token.
 		const turnstileToken = document.querySelector( 'input[name="cf-turnstile-response"]' );
 		if ( ! turnstileToken ) {
-			// todo - show error.
+			const alert = document.createElement( 'div' );
+			alert.classList.add( 'notice' );
+			alert.classList.add( 'notice-error' );
+			alert.innerHTML = '<p>Error! We could not get the Turnstile token. Please close this modal and try with a different key.</p>';
+			submitButton.insertAdjacentElement( 'afterend', alert );
+
+			// Remove the submit button.
+			submitButton.remove();
 			return;
 		}
 
@@ -29,12 +43,26 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			},
 		} ).then( ( response ) => {
 			if ( response.ok ) {
-				console.log( 'success' );
+				// Let's add an inline alert after the submit button.
+				const alert = document.createElement( 'div' );
+				alert.classList.add( 'notice' );
+				alert.classList.add( 'notice-success' );
+				alert.innerHTML = '<p><strong>Success!</strong> Everything is working. Please close this modal and save your changes.</p>';
+				submitButton.insertAdjacentElement( 'afterend', alert );
+
+				// Remove the submit button.
+				submitButton.remove();
 				return response.json();
 			}
 
-			// Failed.
-			// todo - show error.
+			const alert = document.createElement( 'div' );
+			alert.classList.add( 'notice' );
+			alert.classList.add( 'notice-error' );
+			alert.innerHTML = '<p><strong>Error!</strong> Turnstile couldn\'t verify you as human. Please close this modal and try again. If there is still an error, there may be an issue with your Turnstile keys.</p>';
+			submitButton.insertAdjacentElement( 'afterend', alert );
+
+			// Remove the submit button.
+			submitButton.remove();
 		}
 		).catch( ( error ) => {
 			console.error( error );
@@ -48,12 +76,15 @@ window.onLoadDLXPMProPreviewCallback = () => {
 		retry: 'never',
 		callback: ( token ) => {
 			// Re-enable the submit button.
+			const submitButton = document.querySelector( '#dlx-pmpro-turnstile-preview-form input[type="submit"]' );
+			submitButton.removeAttribute( 'disabled' );
+
 			setTimeout( () => {
 				// Reset the widget.
 				// eslint-disable-next-line no-undef
 				turnstile.reset( widgetId );
 			}, 300000 ); // 300 seconds (5 mins).
-		},// This is when I have to register the layout.
+		},
 		size: dlxCF.size, /* can be compact|normal. */
 		theme: dlxCF.theme, /* can be light, dark, auto */
 		language: dlxCF.language,

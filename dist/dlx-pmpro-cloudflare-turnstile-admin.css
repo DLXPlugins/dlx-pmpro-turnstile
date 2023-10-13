@@ -4145,7 +4145,7 @@ div.can-revoke {
 /* Fancybox content */
 #dlx-pmpro-turnstile-preview {
   max-width: 600px;
-  max-height: 600px;
+  min-height: 400px;
   width: 100%;
   height: auto;
   margin: 0 auto;

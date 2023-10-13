@@ -26,6 +26,30 @@ $widget_size       = sanitize_text_field( filter_input( INPUT_GET, 'widgetSize',
 	<meta charset="utf-8">
 	<title>PMPro Turnstile Admin Preview</title>
 	<style>
+		body {
+			font-family: Verdana, Geneva, Tahoma, sans-serif;
+		}
+		h2 {
+			font-family:Arial, Helvetica, sans-serif;
+			font-size: 26px;
+		}
+		input[type="submit"] {
+			display: inline-block;
+			padding: 10px 20px;
+			margin-top: 15px;
+		}
+		.notice {
+			margin-top: 15px;
+			padding: 8px 10px;
+		}
+		.notice-success {
+			background: #eaf5ea;
+			border-left: 4px solid #49a939;
+		}
+		.notice-error {
+			background: #f5e5e4;
+			border-left: 4px solid #bc2b2c;
+		}
 	</style>
 </head>
 <body>
@@ -47,7 +71,7 @@ $widget_size       = sanitize_text_field( filter_input( INPUT_GET, 'widgetSize',
 			<h2>Turnstile Preview</h2>
 			<p>Please complete the challenge (if any) and submit to test if your keys work.</p>
 			<div id="dlx-pmpro-turnstile-placeholder"></div>
-			<input type="submit" value="Submit to Test" />
+			<input type="submit" value="Submit to Test" disabled="disabled" />
 		</form>
 	</div>
 	<?php
