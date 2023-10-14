@@ -6,6 +6,7 @@ import {
 	CheckboxControl,
 	BaseControl,
 	SelectControl,
+	PanelBody,
 	Button,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -14,6 +15,7 @@ import { useAsyncResource } from 'use-async-resource';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation as TriangleExclamation, faCircleCheck as CircleCheck, faEye } from '@fortawesome/free-solid-svg-icons';
 import { faCircleExclamation as CircularExclamation } from '@fortawesome/free-solid-svg-icons/faCircleExclamation';
+import classNames from 'classnames';
 import { Fancybox } from '@fancyapps/ui';
 
 // Local imports.
@@ -92,6 +94,9 @@ const Interface = ( props ) => {
 			resetNonce: dlxPMProTurnstileAdmin.resetNonce,
 			enableMenuHelper: data.enableMenuHelper,
 			enableLicenseAlerts: data.enableLicenseAlerts,
+			enableQueryBypass: data.enableQueryBypass,
+			queryBypassKey: data.queryBypassKey,
+			queryBypassValue: data.queryBypassValue,
 		},
 	} );
 	const formValues = useWatch( { control } );
@@ -122,7 +127,7 @@ const Interface = ( props ) => {
 				status="warning"
 				politeness="assertive"
 				inline={ false }
-				icon={ () => <FontAwesomeIcon icon={ TriangleExclamation } style={ { color: 'currentColor' } } /> }
+				icon={ () => <FontAwesomeIcon size="1x" icon={ TriangleExclamation } style={ { color: 'currentColor' } } /> }
 			/>
 		);
 	};
@@ -134,42 +139,109 @@ const Interface = ( props ) => {
 		// If both site key and secret key have content, show the preview button.
 		if ( siteKey && secretKey ) {
 			return (
-				<Button
-					label={ __( 'Preview Turnstile', 'dlx-pmpro-turnstile' ) }
-					className="dlx-admin__button"
-					onClick={ () => {
-						// Build a URL from admin-ajax.
-						const adminAjaxUrl = dlxPMProTurnstileAdmin.ajaxurl; // Can't use global `ajaxurl` here because `ajaxurl` is a relative path.
+				<div className="dlx-admin-component-row-button">
+					<Button
+						label={ __( 'Preview Turnstile', 'dlx-pmpro-turnstile' ) }
+						className="dlx-admin__button dlx__btn-white"
+						onClick={ () => {
+							// Build a URL from admin-ajax.
+							const adminAjaxUrl = dlxPMProTurnstileAdmin.ajaxurl; // Can't use global `ajaxurl` here because `ajaxurl` is a relative path.
 
-						// Add query params to adminAjaxUrl.
-						const url = new URL( adminAjaxUrl );
-						url.searchParams.set( 'action', 'dlx_pmpro_turnstile_admin_preview' );
-						url.searchParams.set( 'nonce', dlxPMProTurnstileAdmin.previewNonce );
-						url.searchParams.set( 'siteKey', formValues.siteKey );
-						url.searchParams.set( 'secretKey', formValues.secretKey );
-						url.searchParams.set( 'language', formValues.language );
-						url.searchParams.set( 'widgetAppearance', formValues.widgetAppearance );
-						url.searchParams.set( 'widgetTheme', formValues.widgetTheme );
-						url.searchParams.set( 'widgetSize', formValues.widgetSize );
+							// Add query params to adminAjaxUrl.
+							const url = new URL( adminAjaxUrl );
+							url.searchParams.set( 'action', 'dlx_pmpro_turnstile_admin_preview' );
+							url.searchParams.set( 'nonce', dlxPMProTurnstileAdmin.previewNonce );
+							url.searchParams.set( 'siteKey', formValues.siteKey );
+							url.searchParams.set( 'secretKey', formValues.secretKey );
+							url.searchParams.set( 'language', formValues.language );
+							url.searchParams.set( 'widgetAppearance', formValues.widgetAppearance );
+							url.searchParams.set( 'widgetTheme', formValues.widgetTheme );
+							url.searchParams.set( 'widgetSize', formValues.widgetSize );
 
-						// Let's get the URL.
-						const iframeAjaxUrl = url.toString();
+							// Let's get the URL.
+							const iframeAjaxUrl = url.toString();
 
-						// Launch iframe in fancybox.
-						Fancybox.show( [ {
-							src: iframeAjaxUrl,
-							type: 'iframe',
-							autoStart: false,
-							id: 'dlx-pmpro-turnstile-preview',
-						} ] );
-					} }
-					icon={ <FontAwesomeIcon icon={ faEye } style={ { color: 'currentColor' } } /> }
+							// Launch iframe in fancybox.
+							Fancybox.show( [ {
+								src: iframeAjaxUrl,
+								type: 'iframe',
+								autoStart: false,
+								id: 'dlx-pmpro-turnstile-preview',
+							} ] );
+						} }
+						icon={ <FontAwesomeIcon size="1x" icon={ faEye } style={ { color: 'currentColor' } } /> }
+						iconSize="1x"
 
-				>
-					{ __( 'Preview', 'dlx-pmpro-turnstile' ) }
-				</Button>
+					>
+						{ __( 'Preview', 'dlx-pmpro-turnstile' ) }
+					</Button>
+				</div>
 			);
 		}
+	};
+
+	// Get a panel body and display the keys within.
+	const getKeyDrawer = () => {
+		return (
+			<>
+				<div className="dlx-admin__row">
+					<PanelBody
+						title={ __( 'Cloudflare Turnstile Test Keys', 'dlx-pmpro-turnstile' ) }
+						initialOpen={ false }
+					>
+						<div className="dlx-panel-body__content">
+							<p className="description">
+								{ __( 'Use these keys if you need to test Cloudflare locally or as a test.', 'dlx-pmpro-turnstile' ) }
+							</p>
+							<table className="form-table">
+								<thead>
+									<tr>
+										<th scope="col">{ __( 'Site Key', 'dlx-pmpro-turnstile' ) }</th>
+										<th scope="col">{ __( 'Description', 'dlx-pmpro-turnstile' ) }</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>1x00000000000000000000AA</td>
+										<td>{ __( 'Always passes', 'dlx-pmpro-turnstile' ) }</td>
+									</tr>
+									<tr>
+										<td>1x00000000000000000000AA</td>
+										<td>{ __( 'Always blocks', 'dlx-pmpro-turnstile' ) }</td>
+									</tr>
+									<tr>
+										<td>1x00000000000000000000AA</td>
+										<td>{ __( 'Forces interactive challenge', 'dlx-pmpro-turnstile' ) }</td>
+									</tr>
+								</tbody>
+							</table>
+							<table className="form-table">
+								<thead>
+									<tr>
+										<th scope="col">{ __( 'Secret Key', 'dlx-pmpro-turnstile' ) }</th>
+										<th scope="col">{ __( 'Description', 'dlx-pmpro-turnstile' ) }</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>1x0000000000000000000000000000000AA</td>
+										<td>{ __( 'Always passes', 'dlx-pmpro-turnstile' ) }</td>
+									</tr>
+									<tr>
+										<td>2x0000000000000000000000000000000AA</td>
+										<td>{ __( 'Always fails', 'dlx-pmpro-turnstile' ) }</td>
+									</tr>
+									<tr>
+										<td>3x0000000000000000000000000000000AA</td>
+										<td>{ __( 'Forces "token already spent" error', 'dlx-pmpro-turnstile' ) }</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</PanelBody>
+				</div>
+			</>
+		);
 	};
 
 	return (
@@ -283,6 +355,7 @@ const Interface = ( props ) => {
 										/>
 									</div>
 									{ getPreviewButton() }
+									{ getKeyDrawer() }
 								</td>
 							</tr>
 							<tr>
@@ -649,6 +722,128 @@ const Interface = ( props ) => {
 												) }
 											/>
 										</div>
+									) }
+									<div className="dlx-admin__row">
+										<Controller
+											name="enableQueryBypass"
+											control={ control }
+											render={ ( { field: { onChange, value } } ) => (
+												<ToggleControl
+													label={ __( 'Enable Query Bypass', 'dlx-pmpro-turnstile' ) }
+													className="dlx-admin__toggle-control"
+													checked={ value }
+													onChange={ ( boolValue ) => {
+														onChange( boolValue );
+													} }
+													help={ __(
+														'Allow a query parameter to bypass Turnstile. This is useful for testing or if the Turnstile challenge is not working.',
+														'dlx-pmpro-turnstile'
+													) }
+												/>
+											) }
+										/>
+									</div>
+									{ getValues( 'enableQueryBypass' ) && (
+										<>
+											<div className="dlx-admin__row">
+												<Controller
+													name="queryBypassKey"
+													control={ control }
+													rules={ { required: true, pattern: /^[_a-zA-Z]+$/i } }
+													render={ ( { field: { onChange, value } } ) => (
+														<>
+															<TextControl
+																label={ __( 'Query Parameter Key', 'dlx-pmpro-turnstile' ) }
+																className={ classNames(
+																	'dlx-admin__text-control-license',
+																	{
+																		'has-error':
+																			'pattern' === errors.queryBypassKey?.type ||
+																			'required' === errors.queryBypassKey?.type || 'validate' === errors.queryBypassKey?.type,
+																		'is-required': true,
+																	}
+																) }
+																value={ value }
+																onChange={ ( stringValue ) => {
+																	onChange( stringValue );
+																} }
+																help={ __(
+																	'The query parameter key to use for bypassing Turnstile. Only letters and underscores are allowed.',
+																	'dlx-pmpro-turnstile'
+																) }
+															/>
+															{ 'required' === errors.queryBypassKey?.type && (
+																<Notice
+																	message={ __( 'This field is a required field.', 'dlx-pmpro-turnstile' ) }
+																	status="error"
+																	politeness="assertive"
+																	inline={ true }
+																	icon={ () => <FontAwesomeIcon icon={ CircularExclamation } style={ { color: 'currentColor' } } /> }
+																/>
+															) }
+															{ 'pattern' === errors.queryBypassKey?.type && (
+																<Notice
+																	message={ __( 'Please do not enter any special characters or numbers as a key.', 'dlx-pmpro-turnstile' ) }
+																	status="error"
+																	politeness="assertive"
+																	inline={ true }
+																	icon={ () => <FontAwesomeIcon icon={ CircularExclamation } style={ { color: 'currentColor' } } /> }
+																/>
+															) }
+														</>
+													) }
+												/>
+											</div>
+											<div className="dlx-admin__row">
+												<Controller
+													name="queryBypassValue"
+													control={ control }
+													rules={ { required: true, pattern: /^[a-zA-Z0-9]+$/i } }
+													render={ ( { field: { onChange, value } } ) => (
+														<>
+															<TextControl
+																label={ __( 'Query Parameter Value', 'dlx-pmpro-turnstile' ) }
+																className={ classNames(
+																	'dlx-admin__text-control-license',
+																	{
+																		'has-error':
+																			'pattern' === errors.queryBypassKey?.type ||
+																			'required' === errors.queryBypassKey?.type || 'validate' === errors.queryBypassKey?.type,
+																		'is-required': true,
+																	}
+																) }
+																value={ value }
+																onChange={ ( stringValue ) => {
+																	onChange( stringValue );
+																} }
+																help={ __(
+																	'When a query key and value are used together, Turnstile will be bypassed. Only letters and numbers are allowed.',
+																	'dlx-pmpro-turnstile'
+																) }
+															/>
+															{ 'required' === errors.queryBypassValue?.type && (
+																<Notice
+																	message={ __( 'This field is a required field.', 'dlx-pmpro-turnstile' ) }
+																	status="error"
+																	politeness="assertive"
+																	inline={ true }
+																	icon={ () => <FontAwesomeIcon icon={ CircularExclamation } style={ { color: 'currentColor' } } /> }
+																/>
+															) }
+															{ 'pattern' === errors.queryBypassValue?.type && (
+																<Notice
+																	message={ __( 'Please do not enter any special characters or numbers as a key.', 'dlx-pmpro-turnstile' ) }
+																	status="error"
+																	politeness="assertive"
+																	inline={ true }
+																	icon={ () => <FontAwesomeIcon icon={ CircularExclamation } style={ { color: 'currentColor' } } /> }
+																/>
+															) }
+														</>
+													) }
+												/>
+											</div>
+										</>
 									) }
 
 								</td>

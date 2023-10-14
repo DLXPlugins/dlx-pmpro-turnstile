@@ -71,6 +71,18 @@ class Functions {
 
 		$options = Options::get_options();
 
+		// See if we can bypass Turnstile via query.
+		$query_bypass_enabled = (bool) $options['enableQueryBypass'];
+		if ( $query_bypass_enabled ) {
+			$query_key         = sanitize_key( $options['queryBypassKey'] );
+			$query_value       = sanitize_text_field( $options['queryBypassValue'] );
+			$maybe_query_value = sanitize_text_field( filter_input( INPUT_GET, $query_key, FILTER_DEFAULT ) );
+
+			if ( $query_value === $maybe_query_value ) {
+				return false;
+			}
+		}
+
 		// Get the current page object.
 		$current_page = get_queried_object_id();
 
@@ -91,9 +103,9 @@ class Functions {
 		if ( $is_checkout_page ) {
 			// Check to see if query var is set.
 			$enable_turnstile = filter_input( INPUT_GET, 'enable_turnstile', FILTER_VALIDATE_BOOLEAN );
-			$nonce = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
-			$action_enable = 'dlx-pmpro-turnstile-enable';
-			$action_disable = 'dlx-pmpro-turnstile-disable';
+			$nonce            = filter_input( INPUT_GET, 'nonce', FILTER_DEFAULT );
+			$action_enable    = 'dlx-pmpro-turnstile-enable';
+			$action_disable   = 'dlx-pmpro-turnstile-disable';
 
 			if ( null !== $enable_turnstile ) {
 				if ( $enable_turnstile ) {
@@ -187,18 +199,6 @@ class Functions {
 			if ( is_login() && ! $is_wp_login_form_enabled && $is_password_reset_page ) {
 				return false;
 			} elseif ( is_login() && ! $is_pmpro_password_form_enabled && $is_password_reset_page ) {
-				return false;
-			}
-
-			// Skip if query var is to exclude turnstile.
-			$query_hash = filter_input( INPUT_GET, 'pmpro_turnstile_debug', FILTER_DEFAULT );
-
-			$saved_query_hash = '123'; // todo - make option.
-
-			$is_cloudflare_debug_enabled = false; // todo: make option.
-
-			// IF debug is on and hashes match, do not show turnstile.
-			if ( $is_cloudflare_debug_enabled && $query_hash === $saved_query_hash ) {
 				return false;
 			}
 

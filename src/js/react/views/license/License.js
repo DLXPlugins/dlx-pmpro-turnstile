@@ -180,7 +180,7 @@ const Interface = ( props ) => {
 	const getLicenseType = () => {
 		switch ( getValues( 'priceId' ) ) {
 			case '1':
-				return 'Free Tier';
+				return 'Guru';
 			case '2':
 				return 'Freelancer';
 			case '3':

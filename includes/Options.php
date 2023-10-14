@@ -47,8 +47,13 @@ class Options {
 			switch ( $key ) {
 				case 'enabled':
 				case 'enabledPMProLoginForm':
+				case 'enabledPMProPasswordForm':
+				case 'enabledWPPasswordResetForm':
 				case 'enabledWPLoginForm':
 				case 'enabledCheckoutForm':
+				case 'enableMenuHelper':
+				case 'enableLicenseAlerts':
+				case 'enableQueryBypass':
 					$option = filter_var( $options[ $key ], FILTER_VALIDATE_BOOLEAN );
 					break;
 				default:
@@ -122,6 +127,9 @@ class Options {
 			'priceId'                    => '1',
 			'enableMenuHelper'           => true,
 			'enableLicenseAlerts'        => true,
+			'enableQueryBypass'          => false,
+			'queryBypassKey'             => '',
+			'queryBypassValue'           => wp_generate_password( 16, false, false ),
 		);
 		return $defaults;
 	}

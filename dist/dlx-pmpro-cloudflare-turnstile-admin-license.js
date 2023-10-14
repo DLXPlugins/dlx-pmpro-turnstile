@@ -11374,7 +11374,7 @@ var Interface = function Interface(props) {
   var getLicenseType = function getLicenseType() {
     switch (getValues('priceId')) {
       case '1':
-        return 'Free Tier';
+        return 'Guru';
       case '2':
         return 'Freelancer';
       case '3':

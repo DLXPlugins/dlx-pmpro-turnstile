@@ -72,6 +72,7 @@ $widget_size       = sanitize_text_field( filter_input( INPUT_GET, 'widgetSize',
 			<p>Please complete the challenge (if any) and submit to test if your keys work.</p>
 			<div id="dlx-pmpro-turnstile-placeholder"></div>
 			<input type="submit" value="Submit to Test" disabled="disabled" />
+			<div id="notice-placeholder" style="height: 35px;"></div>
 		</form>
 	</div>
 	<?php

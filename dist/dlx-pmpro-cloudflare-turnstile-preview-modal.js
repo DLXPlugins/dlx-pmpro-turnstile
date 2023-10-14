@@ -43,7 +43,10 @@ document.addEventListener('DOMContentLoaded', function () {
       alert.classList.add('notice');
       alert.classList.add('notice-error');
       alert.innerHTML = '<p>Error! We could not get the Turnstile token. Please close this modal and try with a different key.</p>';
-      submitButton.insertAdjacentElement('afterend', alert);
+
+      // Replace placeholder with alert.
+      var noticePlaceholder = document.querySelector('#notice-placeholder');
+      noticePlaceholder.replaceWith(alert);
 
       // Remove the submit button.
       submitButton.remove();
@@ -71,7 +74,11 @@ document.addEventListener('DOMContentLoaded', function () {
         _alert.classList.add('notice');
         _alert.classList.add('notice-success');
         _alert.innerHTML = '<p><strong>Success!</strong> Everything is working. Please close this modal and save your changes.</p>';
-        submitButton.insertAdjacentElement('afterend', _alert);
+        // Get the notice placeholder.
+        var _noticePlaceholder = document.querySelector('#notice-placeholder');
+
+        // Replace placeholder with alert.
+        _noticePlaceholder.replaceWith(_alert);
 
         // Remove the submit button.
         submitButton.remove();
@@ -81,7 +88,8 @@ document.addEventListener('DOMContentLoaded', function () {
       alert.classList.add('notice');
       alert.classList.add('notice-error');
       alert.innerHTML = '<p><strong>Error!</strong> Turnstile couldn\'t verify you as human. Please close this modal and try again. If there is still an error, there may be an issue with your Turnstile keys.</p>';
-      submitButton.insertAdjacentElement('afterend', alert);
+      var noticePlaceholder = document.querySelector('#notice-placeholder');
+      noticePlaceholder.replaceWith(alert);
 
       // Remove the submit button.
       submitButton.remove();

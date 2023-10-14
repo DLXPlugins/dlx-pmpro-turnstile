@@ -3587,6 +3587,24 @@ html {
 .form-table .dlx-admin__row:last-child {
   margin-bottom: 0;
 }
+.form-table .dlx-admin__row .components-panel__body {
+  margin-top: 20px;
+  background: #FFF;
+  border: 1px solid #ddd;
+}
+.form-table .dlx-admin__row .components-panel__body button {
+  box-shadow: unset !important;
+}
+.form-table .dlx-admin__row .components-panel__body.is-opened .components-panel__body-title button {
+  box-shadow: unset !important; /* override core style */
+  border-bottom: 1px solid #ddd;
+}
+.form-table .dlx-admin__row .components-panel__body.is-opened thead tr {
+  border-bottom: 1px solid #333;
+}
+.form-table .dlx-admin__row .components-panel__body.is-opened thead th {
+  padding-left: 10px;
+}
 .form-table .components-toggle-control__label,
 .form-table .components-base-control__label,
 .form-table .components-input-control__label {
@@ -3922,6 +3940,21 @@ html {
   min-width: 48px;
 }
 
+.dlx-admin__row .is-required label {
+  position: relative;
+}
+.dlx-admin__row .is-required label:after {
+  position: absolute;
+  display: inline-block;
+  vertical-align: middle;
+  content: "*";
+  top: -3px;
+  color: #b53b07;
+  font-size: 1.4em;
+  line-height: 1.3;
+  margin-left: 8px;
+}
+
 button.dlx-pmpro__btn-danger {
   background: #fff;
   color: #822700;
@@ -4145,9 +4178,6 @@ div.can-revoke {
 /* Fancybox content */
 #dlx-pmpro-turnstile-preview {
   max-width: 600px;
-  min-height: 400px;
-  width: 100%;
-  height: auto;
   margin: 0 auto;
 }
 
