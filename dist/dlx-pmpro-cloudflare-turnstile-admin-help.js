@@ -7680,7 +7680,7 @@ var Help = function Help(props) {
     className: "dlx-admin-component-row dlx-admin-component-row-button no-flex"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["default"], {
     className: "dlx-button dlx__btn-secondary",
-    href: "https://docs.dlxplugins.com/v/dlx-comments/",
+    href: "https://docs.dlxplugins.com/v/dlx-pmpro-turnstile",
     target: "_blank",
     rel: "noopener noreferrer",
     icon: function icon() {
@@ -7722,7 +7722,7 @@ var Help = function Help(props) {
     className: "dlx-admin-component-row dlx-admin-component-row-button no-flex"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["default"], {
     className: "dlx-button dlx__btn-secondary dlx-button-zap",
-    href: "https://wordpress.org/support/plugin/dlx-pmpro-turnstile/",
+    href: "https://dlxplugins.com/plugins/",
     target: "_blank",
     rel: "noopener noreferrer",
     icon: function icon() {
@@ -7735,7 +7735,7 @@ var Help = function Help(props) {
     }
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('View Deluxe Plugins', 'dlx-pmpro-turnstile')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["default"], {
     className: "dlx-button dlx__btn-secondary",
-    href: "https://dlxplugins.com/support/",
+    href: "https://dlxplugins.com/tutorials/",
     target: "_blank",
     rel: "noopener noreferrer",
     icon: function icon() {

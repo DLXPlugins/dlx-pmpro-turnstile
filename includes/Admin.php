@@ -191,6 +191,13 @@ class Admin {
 
 		// Overrride options.
 		$options = Options::get_options();
+
+		// Clear options.
+		$options['licenseValid']     = false;
+		$options['licenseActivated'] = false;
+		$options['licenseKey']       = '';
+		$options['licenseData']      = false;
+
 		Options::update_options( $options );
 		if ( $response['license_errors'] ) {
 			$license_helper->set_activated_status( false );

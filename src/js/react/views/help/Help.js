@@ -38,7 +38,7 @@ const Help = ( props ) => {
 					<div className="dlx-admin-component-row dlx-admin-component-row-button no-flex">
 						<Button
 							className="dlx-button dlx__btn-secondary"
-							href="https://docs.dlxplugins.com/v/dlx-comments/"
+							href="https://docs.dlxplugins.com/v/dlx-pmpro-turnstile"
 							target="_blank"
 							rel="noopener noreferrer"
 							icon={ () => <FontAwesomeIcon icon={ Bookmark } style={ { color: 'currentColor' } } /> }
@@ -82,7 +82,7 @@ const Help = ( props ) => {
 					<div className="dlx-admin-component-row dlx-admin-component-row-button no-flex">
 						<Button
 							className="dlx-button dlx__btn-secondary dlx-button-zap"
-							href="https://wordpress.org/support/plugin/dlx-pmpro-turnstile/"
+							href="https://dlxplugins.com/plugins/"
 							target="_blank"
 							rel="noopener noreferrer"
 							icon={ () => <FontAwesomeIcon icon={ PlugCircleBolt } style={ { color: 'currentColor' } } /> }
@@ -91,7 +91,7 @@ const Help = ( props ) => {
 						</Button>
 						<Button
 							className="dlx-button dlx__btn-secondary"
-							href="https://dlxplugins.com/support/"
+							href="https://dlxplugins.com/tutorials/"
 							target="_blank"
 							rel="noopener noreferrer"
 							icon={ () => <FontAwesomeIcon icon={ BookOpenReader } style={ { color: 'currentColor' } } /> }
