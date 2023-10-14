@@ -87,7 +87,7 @@ class Turnstile {
 			}
 			if ( \is_wp_error( $token_check ) || ! $token_check ) {
 				$can_continue = false;
-				pmpro_setMessage( esc_html__( 'Sorry, we could not verify that you are human..', 'dlx-pmpro-turnstile' ), 'pmpro_error' );
+				pmpro_setMessage( esc_html__( 'Sorry, we could not verify that you are human...', 'dlx-pmpro-turnstile' ), 'pmpro_error' );
 
 			}
 		}
@@ -158,8 +158,8 @@ class Turnstile {
 	 */
 	public function check_turnstile_token( $user_object = null, $password = '' ) {
 		// Remove filter to prevent login lockup.
-		remove_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 100, 2 ); 
-		
+		remove_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 100, 2 );
+
 		// Get options.
 		$options = Options::get_options();
 
@@ -171,7 +171,26 @@ class Turnstile {
 
 		// Get WordFence token. Return if found.
 		$wf_token = filter_input( INPUT_POST, 'wfls-token', FILTER_DEFAULT );
-		if ( $maybe_token &&  $wf_token && null !== $user_object ) {
+		if ( $maybe_token && $wf_token && null !== $user_object ) {
+			return $user_object;
+		}
+
+		// Check for bypass key/values.
+		$bypass_enabled = (bool) $options['enableQueryBypass'];
+		if ( $bypass_enabled ) {
+			$bypass_key          = $options['queryBypassKey'] ?? '';
+			$bypass_value        = $options['queryBypassValue'] ?? '';
+			$posted_bypass_key   = filter_input( INPUT_POST, 'pmpro_bypass_key', FILTER_DEFAULT );
+			$posted_bypass_value = filter_input( INPUT_POST, 'pmpro_bypass_value', FILTER_DEFAULT );
+
+			// If the key and value match, we can bypass.
+			if ( $posted_bypass_key === $bypass_key && $posted_bypass_value === $bypass_value ) {
+				return $user_object;
+			}
+		}
+
+		// Check to see if DEBUG contant is set.
+		if ( defined( 'PMPRO_TURNSTILE_DISABLE' ) && PMPRO_TURNSTILE_DISABLE ) {
 			return $user_object;
 		}
 
@@ -237,8 +256,9 @@ class Turnstile {
 	 * Output Turnstile HTML.
 	 */
 	public function output_turnstile_html() {
-		// If we can't show Turnstile, bail.
 		if ( ! Functions::can_show_turnstile() ) {
+			// If we can't show Turnstile, bail.
+			$this->output_query_bypass_values();
 			return;
 		}
 
@@ -253,12 +273,44 @@ class Turnstile {
 	}
 
 	/**
+	 * Output hidden fields for the query bypass.
+	 */
+	private function output_query_bypass_values() {
+		// Check GET vars for query bypass key.
+		// Add bypass variables to form.
+		$options        = Options::get_options();
+		$bypass_enabled = (bool) $options['enableQueryBypass'];
+		$bypass_key     = $options['queryBypassKey'] ?? '';
+		$bypass_value   = $options['queryBypassValue'] ?? '';
+
+		// Bail early if bypass is not enabled.
+		if ( ! $bypass_enabled ) {
+			return;
+		}
+
+		// Attempt to get the key.
+		$maybe_value = filter_input( INPUT_GET, $bypass_key, FILTER_DEFAULT );
+		if ( $maybe_value ) {
+			if ( $maybe_value === $bypass_value ) {
+				// If the key and value match, we can bypass.
+				?>
+				<input type="hidden" name="pmpro_bypass_key" value="<?php echo esc_attr( $bypass_key ); ?>" />
+				<input type="hidden" name="pmpro_bypass_value" value="<?php echo esc_attr( $maybe_value ); ?>" />
+				<?php
+			}
+		}
+	}
+
+	/**
 	 * Output Turnstile HTML.
 	 */
 	public function return_turnstile_html() {
 		// If we can't show Turnstile, bail.
 		if ( ! Functions::can_show_turnstile() ) {
-			return;
+			ob_start();
+			$this->output_query_bypass_values();
+			$query_vals = ob_get_clean();
+			return $query_vals;
 		}
 
 		// Check for errors on login page.
@@ -274,8 +326,9 @@ class Turnstile {
 			$html .= esc_html( $verification_message );
 			$html .= '</div>';
 		}
+
 		$this->enqueue_scripts();
-		return $html . '<div id="dlx-pmpro-turnstile"></div>';
+		return $html . '<div id="dlx-pmpro-turnstile"></div> . $query_vals';
 	}
 
 	/**

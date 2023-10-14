@@ -12,6 +12,7 @@ module.exports = function( grunt ) {
 					{ src: [ 'assets/**' ], dest: '/' },
 					{ src: [ 'lib/**' ], dest: '/' }, // includes files in path and its subdirs
 					{ src: [ 'dist/**' ], dest: '/' }, // includes files in path and its subdirs
+					{ src: [ 'templates/**' ], dest: '/' },
 				],
 			},
 		},
