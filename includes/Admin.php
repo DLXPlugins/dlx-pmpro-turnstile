@@ -22,6 +22,9 @@ class Admin {
 		// Enqueue scripts for the admin page.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		// For redirecting from options screen to settings screen.
+		add_action( 'current_screen', array( $this, 'redirect_to_settings' ) );
+
 		// For retrieving the options.
 		add_action( 'wp_ajax_dlx_pmpro_turnstile_get_options', array( $this, 'ajax_get_options' ) );
 
@@ -112,6 +115,18 @@ class Admin {
 			}
 		}
 		\wp_send_json_error( array() );
+	}
+
+	/**
+	 * Redirect to settings screen. This menu is only for the options settings screen.
+	 *
+	 * @param object $screen The current screen object.
+	 */
+	public function redirect_to_settings( $screen ) {
+		if ( 'settings_page_dlx-pmpro-turnstile-options' === $screen->id ) {
+			\wp_safe_redirect( Functions::get_settings_url() );
+			exit;
+		}
 	}
 
 	/**
@@ -391,6 +406,13 @@ class Admin {
 			'dlx-pmpro-turnstile',
 			array( $this, 'admin_page' ),
 			4
+		);
+		add_options_page(
+			__( 'PMPro Turnstile', 'pmpro-turnstile' ),
+			__( 'PMPro Turnstile', 'pmpro-turnstile' ),
+			'manage_options',
+			'dlx-pmpro-turnstile-options',
+			'__return_false'
 		);
 	}
 

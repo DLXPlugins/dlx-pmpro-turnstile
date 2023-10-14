@@ -13,7 +13,7 @@ import { __ } from '@wordpress/i18n';
 import { useForm, Controller, useWatch, useFormState } from 'react-hook-form';
 import { useAsyncResource } from 'use-async-resource';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation as TriangleExclamation, faCircleCheck as CircleCheck, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faTriangleExclamation as TriangleExclamation, faCircleCheck as CircleCheck, faEye, faExternalLink as ExternalLink } from '@fortawesome/free-solid-svg-icons';
 import { faCircleExclamation as CircularExclamation } from '@fortawesome/free-solid-svg-icons/faCircleExclamation';
 import classNames from 'classnames';
 import { Fancybox } from '@fancyapps/ui';
@@ -139,7 +139,7 @@ const Interface = ( props ) => {
 		// If both site key and secret key have content, show the preview button.
 		if ( siteKey && secretKey ) {
 			return (
-				<div className="dlx-admin-component-row-button">
+				<div className="dlx-admin-component-row dlx-admin-component-row-button no-flex">
 					<Button
 						label={ __( 'Preview Turnstile', 'dlx-pmpro-turnstile' ) }
 						className="dlx-admin__button dlx__btn-white"
@@ -173,7 +173,16 @@ const Interface = ( props ) => {
 						iconSize="1x"
 
 					>
-						{ __( 'Preview', 'dlx-pmpro-turnstile' ) }
+						{ __( 'Preview and Test', 'dlx-pmpro-turnstile' ) }
+					</Button>
+					<Button
+						className="dlx-admin__button dlx__btn-white"
+						href="https://dlxplugins.com/how-to/how-to-retrieve-your-cloudflare-turnstile-site-and-secret-keys/"
+						icon={ <FontAwesomeIcon size="1x" icon={ ExternalLink } style={ { color: 'currentColor' } } /> }
+						iconSize="1x"
+						target="_blank"
+					>
+						{ __( 'Find Your Keys', 'dlx-pmpro-turnstile' ) }
 					</Button>
 				</div>
 			);
