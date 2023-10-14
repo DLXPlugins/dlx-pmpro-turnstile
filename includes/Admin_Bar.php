@@ -26,7 +26,7 @@ class Admin_Bar {
 	 * @param WP_Admin_Bar $admin_bar Admin bar reference.
 	 */
 	public function add_admin_bar_menu( $admin_bar ) {
-		$options = Options::get_options();
+		$options             = Options::get_options();
 		$menu_helper_enabled = (bool) $options['enableMenuHelper'];
 		if ( false === $menu_helper_enabled ) {
 			return;
@@ -55,7 +55,7 @@ class Admin_Bar {
 		$enable_turnstile_url = add_query_arg(
 			array(
 				'enable_turnstile' => '1',
-				'nonce'			=> wp_create_nonce( 'dlx-pmpro-turnstile-enable' ),
+				'nonce'            => wp_create_nonce( 'dlx-pmpro-turnstile-enable' ),
 			)
 		);
 
@@ -63,10 +63,9 @@ class Admin_Bar {
 		$disable_turnstile_url = add_query_arg(
 			array(
 				'enable_turnstile' => '0',
-				'nonce'			=> wp_create_nonce( 'dlx-pmpro-turnstile-disable' ),
+				'nonce'            => wp_create_nonce( 'dlx-pmpro-turnstile-disable' ),
 			)
 		);
-
 
 		// Enable Cloudflare menu.
 		$admin_bar->add_node(

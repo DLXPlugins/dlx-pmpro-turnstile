@@ -107,6 +107,12 @@ class PMProTurnstile {
 add_action(
 	'plugins_loaded',
 	function () {
+		// Check for pmpro activation.
+		if ( ! Functions::is_activated( 'paid-memberships-pro/paid-memberships-pro.php' ) && ! function_exists( 'pmpro_getOption' ) ) {
+			return;
+		}
+
+		// Begin loading in the plugin.
 		$pmpro_turnstile = PMPROTurnstile::get_instance();
 		$pmpro_turnstile->plugins_loaded();
 	}

@@ -239,8 +239,10 @@ class Functions {
 			if ( current_user_can( 'manage_options' ) ) {
 				return false;
 			}
-			$current_user_level = pmpro_getMembershipLevelForUser( get_current_user_id() );
-			$current_user_level = absint( $current_user_level->ID ?? 0 );
+			if ( function_exists( 'pmpro_getMembershipLevelForUser' ) ) { // Introduced in PMPro 2.0.
+				$current_user_level = pmpro_getMembershipLevelForUser( get_current_user_id() );
+				$current_user_level = absint( $current_user_level->ID ?? 0 );
+			}
 		}
 
 		// If user is logged in and has a level, check if they should be excluded.
