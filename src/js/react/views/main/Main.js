@@ -187,6 +187,19 @@ const Interface = ( props ) => {
 				</div>
 			);
 		}
+		return (
+			<div className="dlx-admin-component-row dlx-admin-component-row-button no-flex">
+				<Button
+					className="dlx-admin__button dlx__btn-white"
+					href="https://dlxplugins.com/how-to/how-to-retrieve-your-cloudflare-turnstile-site-and-secret-keys/"
+					icon={ <FontAwesomeIcon size="1x" icon={ ExternalLink } style={ { color: 'currentColor' } } /> }
+					iconSize="1x"
+					target="_blank"
+				>
+					{ __( 'Find Your Keys', 'dlx-pmpro-turnstile' ) }
+				</Button>
+			</div>
+		);
 	};
 
 	// Get a panel body and display the keys within.
@@ -755,6 +768,13 @@ const Interface = ( props ) => {
 									{ getValues( 'enableQueryBypass' ) && (
 										<>
 											<div className="dlx-admin__row">
+												<Notice
+													message={ __( 'Please store the key and value in a safe place in case you are ever locked out of the admin.', 'dlx-pmpro-turnstile' ) }
+													status="warning"
+													politeness="polite"
+													inline={ false }
+													icon={ () => <FontAwesomeIcon icon={ CircularExclamation } style={ { color: 'currentColor' } } /> }
+												/>
 												<Controller
 													name="queryBypassKey"
 													control={ control }

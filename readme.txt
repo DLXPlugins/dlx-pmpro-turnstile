@@ -1,6 +1,5 @@
 === DLX PMPro Turnstile ===
 Contributors: DLX Plugins
-Donate link: [Your Donate Link if any]
 Tags: paid memberships pro, cloudflare, turnstile, spam protection, login protection, checkout protection
 Requires at least: PHP 7.2
 Tested up to: WP 6.2.3

@@ -161,7 +161,7 @@ class Admin {
 		$setting_links = array(
 			'settings' => sprintf( '<a href="%s">%s</a>', esc_url( Functions::get_settings_url() ), esc_html__( 'Settings', 'dlx-pmpro-turnstile' ) ),
 			'docs'     => sprintf( '<a href="%s">%s</a>', esc_url( 'https://docs.dlxplugins.com/' ), esc_html__( 'Docs', 'dlx-pmpro-turnstile' ) ),
-			'site'     => sprintf( '<a href="%s" style="color: #f60098;">%s</a>', esc_url( 'https://dlxplugins.com/plugins/ajaxify-comments/' ), esc_html__( 'Visit Site', 'dlx-pmpro-turnstile' ) ),
+			'site'     => sprintf( '<a href="%s" style="color: #f60098;">%s</a>', esc_url( 'https://dlxplugins.com/plugins/pmpro-turnstile/' ), esc_html__( 'Plugin Home', 'dlx-pmpro-turnstile' ) ),
 		);
 		if ( ! is_array( $settings ) ) {
 			return $setting_links;
@@ -357,6 +357,18 @@ class Admin {
 
 		// Get defaults and reset.
 		$default_options = Options::get_defaults();
+
+		// Don't reset license.
+		$license_keys = array(
+			'licenseKey',
+			'licenseValid',
+			'licenseActivated',
+			'licenseData',
+		);
+		foreach ( $license_keys as $license_key ) {
+			$default_options[ $license_key ] = $options[ $license_key ];
+		}
+
 		Options::update_options( $default_options );
 
 		// Pull in nonces to default options before returning.
