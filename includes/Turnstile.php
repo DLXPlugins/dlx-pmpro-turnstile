@@ -328,7 +328,7 @@ class Turnstile {
 		}
 
 		$this->enqueue_scripts();
-		return $html . '<div id="dlx-pmpro-turnstile"></div> . $query_vals';
+		return $html . '<div id="dlx-pmpro-turnstile"></div>';
 	}
 
 	/**
