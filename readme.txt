@@ -3,7 +3,7 @@ Contributors: DLX Plugins
 Tags: paid memberships pro, cloudflare, turnstile, spam protection, login protection, checkout protection
 Requires at least: PHP 7.2
 Tested up to: WP 6.2.3
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL 3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Plugin URI: https://dlxplugins.com/plugins/pmpro-turnstile
@@ -27,9 +27,9 @@ Absolutely! Enjoy a 7-day trial on all plans, and feel free to cancel anytime du
 We have a 30-day refund policy in place for peace of mind.
 
 == Changelog ==
-= 1.0.0 =
+= 1.0.1 =
 * Initial release
 
 == Upgrade Notice ==
-= 1.0.0 =
+= 1.0.1 =
 * Initial release
