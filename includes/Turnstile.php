@@ -318,6 +318,7 @@ class Turnstile {
 
 		// If action `pmpro-turnstile-error` is set, show error.
 		$pmpro_turnstile_error = filter_input( INPUT_GET, 'action', FILTER_DEFAULT );
+		$html                  = '';
 		if ( $pmpro_turnstile_error ) {
 			// Build PMPRo compatible error message.
 			$verification_message = __( 'Cloudflare Turnstile verification failed. Please try again.', 'dlx-pmpro-turnstile' );
