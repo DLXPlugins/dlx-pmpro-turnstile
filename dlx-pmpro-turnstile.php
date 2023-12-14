@@ -3,11 +3,11 @@
  * Plugin Name:       Paid Memberships Pro - Add Cloudflare Turnstile
  * Plugin URI:        https://dlxplugins.com/plugins/pmpro-turnstile/
  * Description:       Add Cloudflare Turnstile to your PMPro login and checkout forms.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Requires at least: 6.1
  * Requires PHP:      7.2
  * Author:            DLX Plugins
- * Author URI:        https://dlxplugins.com
+ * Author URI:        https://dlxplugins.com/plugins/pmpro-turnstile/
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       alerts-dlx
@@ -18,7 +18,7 @@
 
 namespace DLXPlugins\PMProTurnstile;
 
-define( 'DLX_PMPRO_TURNSTILE_VERSION', '1.0.1' );
+define( 'DLX_PMPRO_TURNSTILE_VERSION', '1.0.2' );
 define( 'DLX_PMPRO_TURNSTILE_FILE', __FILE__ );
 define( 'DLX_PMPRO_TURNSTILE_PRODUCT_ID', 36132 );
 
@@ -172,8 +172,8 @@ function can_redirect_on_activation() {
 	}
 
 	// See if cloudflare keys are already set.
-	$options = Options::get_options();
-	$site_key = $options['siteKey'];
+	$options    = Options::get_options();
+	$site_key   = $options['siteKey'];
 	$secret_key = $options['secretKey'];
 	if ( ! empty( $site_key ) && ! empty( $secret_key ) ) {
 		return false;
