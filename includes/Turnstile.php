@@ -59,7 +59,7 @@ class Turnstile {
 		add_filter( 'login_form_middle', array( $this, 'return_turnstile_html' ) );
 
 		// Check turnstile token for login authentication.
-		add_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 1, 2 ); // Run super late.
+		add_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 20, 2 ); // Run super late.
 
 		// Add turnstile output to footer if on login page.
 		add_action( 'wp_footer', array( $this, 'maybe_output_footer_html' ) );
@@ -157,8 +157,8 @@ class Turnstile {
 	 * @return bool|null|\WP_User true or false if token succeeded.
 	 */
 	public function check_turnstile_token( $user_object = null, $password = '' ) {
-		// Remove filter to prevent login lockup.
-		remove_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 100, 2 );
+
+		remove_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 20, 2 );
 
 		// Get options.
 		$options = Options::get_options();
@@ -168,6 +168,8 @@ class Turnstile {
 
 		// If there's a turnstile token, I suppose that means we should validate it.
 		$maybe_token = filter_input( INPUT_POST, 'cf-turnstile-response', FILTER_DEFAULT );
+
+		$user_object = $user_object->data ?? null;
 
 		// Get WordFence token. Return if found.
 		$wf_token = filter_input( INPUT_POST, 'wfls-token', FILTER_DEFAULT );
@@ -227,7 +229,7 @@ class Turnstile {
 			// Get body.
 			$body = json_decode( wp_remote_retrieve_body( $response ), true );
 
-			$is_success = $body['success'] ?? false;
+			$is_success = (bool) $body['success'] ?? false;
 			// If not a success, error.
 			if ( ! $is_success ) {
 				$can_proceed = false;
@@ -249,7 +251,7 @@ class Turnstile {
 		$pmpro_msgt         = 'pmpro_error';
 		$pmpro_error_fields = array( 'cf-turnstile-response' );
 
-		return false;
+		return null;
 	}
 
 	/**
@@ -319,7 +321,7 @@ class Turnstile {
 		// If action `pmpro-turnstile-error` is set, show error.
 		$pmpro_turnstile_error = filter_input( INPUT_GET, 'action', FILTER_DEFAULT );
 		$html                  = '';
-		if ( $pmpro_turnstile_error ) {
+		if ( 'incorrect_password' === $pmpro_turnstile_error ) {
 			// Build PMPRo compatible error message.
 			$verification_message = __( 'Cloudflare Turnstile verification failed. Please try again.', 'dlx-pmpro-turnstile' );
 
