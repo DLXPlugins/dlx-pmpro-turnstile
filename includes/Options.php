@@ -119,7 +119,7 @@ class Options {
 			'secretKey'                  => '',
 			'language'                   => 'en',
 			'widgetAppearance'           => 'always',
-			'widgettheme'                => 'auto',
+			'widgetTheme'                => 'auto',
 			'widgetSize'                 => 'normal',
 			'excludedMembershipLevels'   => array(),
 			'excludedCheckoutLevels'     => array(),
