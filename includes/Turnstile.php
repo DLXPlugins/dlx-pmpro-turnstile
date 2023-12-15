@@ -158,7 +158,9 @@ class Turnstile {
 	 */
 	public function check_turnstile_token( $user_object = null, $password = '' ) {
 
-		remove_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 20, 2 );
+		if ( null === $user_object ) {
+			return null;
+		}
 
 		// Get options.
 		$options = Options::get_options();
@@ -168,12 +170,17 @@ class Turnstile {
 
 		// If there's a turnstile token, I suppose that means we should validate it.
 		$maybe_token = filter_input( INPUT_POST, 'cf-turnstile-response', FILTER_DEFAULT );
-
-		$user_object = $user_object->data ?? null;
+		remove_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 20, 2 );
+		// If pmpro login page, return data portion of user object.
+		$login_page_id = get_option( 'pmpro_login_page_id' );
+		if ( $login_page_id === get_queried_object_id() ) {
+			remove_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 20, 2 );
+			return $user_object->data;
+		}
 
 		// Get WordFence token. Return if found.
 		$wf_token = filter_input( INPUT_POST, 'wfls-token', FILTER_DEFAULT );
-		if ( $maybe_token && $wf_token && null !== $user_object ) {
+		if ( $maybe_token && $wf_token ) {
 			return $user_object;
 		}
 
