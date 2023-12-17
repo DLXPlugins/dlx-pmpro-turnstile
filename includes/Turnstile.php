@@ -174,13 +174,16 @@ class Turnstile {
 		// If pmpro login page, return data portion of user object.
 		$login_page_id = get_option( 'pmpro_login_page_id' );
 		if ( $login_page_id === get_queried_object_id() ) {
-			remove_filter( 'wp_authenticate_user', array( $this, 'check_turnstile_token' ), 20, 2 );
 			return $user_object->data;
 		}
 
-		// Get WordFence token. Return if found.
-		$wf_token = filter_input( INPUT_POST, 'wfls-token', FILTER_DEFAULT );
-		if ( $maybe_token && $wf_token ) {
+		// Start session.
+		if ( ! session_id() ) {
+			session_start();
+		}
+
+		// Check if already validated.
+		if ( isset( $_SESSION['pmpro_turnstile_login_check'] ) && wp_verify_nonce( sanitize_text_field( $_SESSION['pmpro_turnstile_login_check'] ), 'pmpro_turnstile_login_check' ) ) {
 			return $user_object;
 		}
 
@@ -247,6 +250,8 @@ class Turnstile {
 
 		// Can we go?
 		if ( true === $can_proceed ) {
+			// Set session.
+			$_SESSION['pmpro_turnstile_login_check'] = wp_create_nonce( 'pmpro_turnstile_login_check' );
 			return $user_object;
 		}
 
